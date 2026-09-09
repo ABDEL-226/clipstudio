@@ -1,2332 +1,878 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ClipStudio — Génération vidéo IA</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<!-- SUPABASE -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    background: #050505;
-    color: #ffffff;
-    min-height: 100vh;
-}
-
-button,
-input,
-textarea,
-select {
-    font-family: inherit;
-}
-
-button {
-    cursor: pointer;
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* =========================
-   VARIABLES
-========================= */
-
-:root {
-    --bg: #050505;
-    --bg-secondary: #0b0b0b;
-    --card: #111111;
-    --card-hover: #171717;
-
-    --border: rgba(255,255,255,0.08);
-    --border-hover: rgba(255,255,255,0.16);
-
-    --text: #ffffff;
-    --text-secondary: #a1a1aa;
-    --text-muted: #71717a;
-
-    --accent: #14b8a6;
-    --accent-hover: #0d9488;
-
-    --danger: #ef4444;
-    --success: #22c55e;
-
-    --radius: 14px;
-}
-
-/* =========================
-   SCROLLBAR
-========================= */
-
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #050505;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #27272a;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #3f3f46;
-}
-
-/* =========================
-   LOGIN SCREEN
-========================= */
-
-#loginScreen {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background:
-        radial-gradient(
-            circle at 50% 20%,
-            rgba(20,184,166,0.12),
-            transparent 35%
-        ),
-        #050505;
-
-    padding: 20px;
-}
-
-.login-container {
-    width: 100%;
-    max-width: 430px;
-}
-
-.login-logo {
-    text-align: center;
-    margin-bottom: 45px;
-}
-
-.login-logo h1 {
-    font-size: 36px;
-    font-weight: 800;
-    letter-spacing: -1.5px;
-}
-
-.login-logo h1 span {
-    color: var(--accent);
-}
-
-.login-logo p {
-    margin-top: 10px;
-    color: var(--text-secondary);
-    font-size: 14px;
-}
-
-/* =========================
-   LOGIN CARD
-========================= */
-
-.login-card {
-    background: rgba(17,17,17,0.85);
-    border: 1px solid var(--border);
-
-    border-radius: 20px;
-
-    padding: 32px;
-
-    box-shadow:
-        0 30px 80px rgba(0,0,0,0.45),
-        inset 0 1px 0 rgba(255,255,255,0.03);
-
-    backdrop-filter: blur(20px);
-}
-
-.login-card h2 {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-
-.login-card-description {
-    color: var(--text-secondary);
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 28px;
-}
-
-/* =========================
-   GOOGLE BUTTON
-========================= */
-
-.google-login-button {
-    width: 100%;
-
-    height: 52px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-
-    border-radius: 12px;
-
-    background: #ffffff;
-    color: #111111;
-
-    border: none;
-
-    font-size: 15px;
-    font-weight: 600;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
-}
-
-.google-login-button:hover {
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,0.3);
-
-    background: #f4f4f5;
-}
-
-.google-icon {
-    width: 20px;
-    height: 20px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-weight: 800;
-    font-size: 18px;
-}
-
-.login-security {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-
-    margin-top: 22px;
-
-    color: var(--text-muted);
-
-    font-size: 12px;
-}
-
-.login-security-icon {
-    font-size: 14px;
-}
-
-/* =========================
-   MAIN APP
-========================= */
-
-#app {
-    min-height: 100vh;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-
-    height: 72px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 28px;
-
-    background: rgba(5,5,5,0.82);
-
-    border-bottom: 1px solid var(--border);
-
-    backdrop-filter: blur(20px);
-}
-
-.logo {
-    font-size: 21px;
-    font-weight: 800;
-    letter-spacing: -0.7px;
-}
-
-.logo span {
-    color: var(--accent);
-}
-
-/* =========================
-   HEADER RIGHT
-========================= */
-
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.credits-badge {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-
-    padding: 8px 13px;
-
-    border-radius: 10px;
-
-    background: rgba(20,184,166,0.08);
-
-    border: 1px solid rgba(20,184,166,0.18);
-
-    color: #5eead4;
-
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.user-menu-button {
-    width: 38px;
-    height: 38px;
-
-    border-radius: 50%;
-
-    border: 1px solid var(--border);
-
-    background: #18181b;
-
-    color: white;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden;
-}
-
-.user-menu-button img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* =========================
-   MAIN CONTENT
-========================= */
-
-.main-content {
-    width: 100%;
-    max-width: 1180px;
-
-    margin: 0 auto;
-
-    padding: 70px 24px 100px;
-}
-
-/* =========================
-   HERO
-========================= */
-
-.hero {
-    text-align: center;
-
-    max-width: 820px;
-
-    margin: 0 auto 60px;
-}
-
-.hero h1 {
-    font-size: clamp(42px, 7vw, 76px);
-
-    line-height: 0.98;
-
-    letter-spacing: -4px;
-
-    font-weight: 800;
-}
-
-.hero h1 span {
-    color: var(--accent);
-}
-
-.hero p {
-    max-width: 600px;
-
-    margin: 22px auto 0;
-
-    color: var(--text-secondary);
-
-    font-size: 16px;
-
-    line-height: 1.7;
-}
-
-/* =========================
-   GENERATOR
-========================= */
-
-.generator-card {
-    background: rgba(17,17,17,0.8);
-
-    border: 1px solid var(--border);
-
-    border-radius: 20px;
-
-    padding: 28px;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,0.25);
-}
-
-.form-group {
-    margin-bottom: 22px;
-}
-
-.form-label {
-    display: block;
-
-    margin-bottom: 9px;
-
-    color: #e4e4e7;
-
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.form-label span {
-    color: var(--text-muted);
-    font-weight: 400;
-}
-
-/* =========================
-   TEXTAREA
-========================= */
-
-.prompt-input {
-    width: 100%;
-
-    min-height: 150px;
-
-    resize: vertical;
-
-    padding: 16px;
-
-    border-radius: 12px;
-
-    background: #090909;
-
-    border: 1px solid var(--border);
-
-    outline: none;
-
-    color: white;
-
-    font-size: 14px;
-
-    line-height: 1.6;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.prompt-input::placeholder {
-    color: #52525b;
-}
-
-.prompt-input:focus {
-    border-color: rgba(20,184,166,0.55);
-
-    box-shadow:
-        0 0 0 3px rgba(20,184,166,0.08);
-}
-
-/* =========================
-   OPTIONS GRID
-========================= */
-
-.options-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
-    gap: 14px;
-}
-
-.option-select {
-    width: 100%;
-
-    height: 48px;
-
-    padding: 0 13px;
-
-    border-radius: 10px;
-
-    border: 1px solid var(--border);
-
-    background: #090909;
-
-    color: white;
-
-    outline: none;
-
-    font-size: 13px;
-
-    appearance: none;
-}
-
-.option-select:focus {
-    border-color: rgba(20,184,166,0.55);
-}
-
-/* =========================
-   GENERATE BUTTON
-========================= */
-
-.generate-button {
-    width: 100%;
-
-    height: 54px;
-
-    margin-top: 8px;
-
-    border: none;
-
-    border-radius: 12px;
-
-    background: var(--accent);
-
-    color: #00110f;
-
-    font-size: 15px;
-
-    font-weight: 800;
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.generate-button:hover {
-    background: #2dd4bf;
-
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 12px 30px rgba(20,184,166,0.18);
-}
-
-.generate-button:disabled {
-    opacity: 0.5;
-
-    cursor: not-allowed;
-
-    transform: none;
-
-    box-shadow: none;
-}
-
-/* =========================
-   GENERATION STATUS
-========================= */
-
-.generation-status {
-    margin-top: 20px;
-
-    padding: 18px;
-
-    border-radius: 12px;
-
-    background: #090909;
-
-    border: 1px solid var(--border);
-
-    text-align: center;
-}
-
-.loading-spinner {
-    width: 26px;
-    height: 26px;
-
-    margin: 0 auto 12px;
-
-    border: 3px solid rgba(255,255,255,0.1);
-
-    border-top-color: var(--accent);
-
-    border-radius: 50%;
-
-    animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.generation-status-text {
-    color: var(--text-secondary);
-
-    font-size: 13px;
-}
-
-/* =========================
-   CREATIONS
-========================= */
-
-.creations-section {
-    margin-top: 70px;
-}
-
-.section-header {
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 20px;
-}
-
-.section-header h2 {
-    font-size: 21px;
-
-    letter-spacing: -0.5px;
-}
-
-.section-header span {
-    color: var(--text-muted);
-
-    font-size: 13px;
-}
-
-.creations-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-    gap: 18px;
-}
-
-.creation-card {
-    overflow: hidden;
-
-    border-radius: 15px;
-
-    background: #111111;
-
-    border: 1px solid var(--border);
-
-    transition:
-        transform 0.2s ease,
-        border-color 0.2s ease;
-}
-
-.creation-card:hover {
-    transform: translateY(-3px);
-
-    border-color: var(--border-hover);
-}
-
-.creation-preview {
-    aspect-ratio: 16 / 9;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(20,184,166,0.12),
-            transparent 60%
-        ),
-        #090909;
-
-    color: var(--accent);
-
-    font-size: 30px;
-}
-
-.creation-info {
-    padding: 15px;
-}
-
-.creation-prompt {
-    color: #e4e4e7;
-
-    font-size: 13px;
-
-    line-height: 1.5;
-
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-
-    overflow: hidden;
-}
-
-.creation-meta {
-    margin-top: 10px;
-
-    display: flex;
-
-    gap: 8px;
-
-    flex-wrap: wrap;
-}
-
-.meta-tag {
-    padding: 5px 8px;
-
-    border-radius: 7px;
-
-    background: #18181b;
-
-    color: var(--text-muted);
-
-    font-size: 10px;
-}
-
-/* =========================
-   EMPTY STATE
-========================= */
-
-.empty-state {
-    padding: 60px 20px;
-
-    text-align: center;
-
-    border-radius: 16px;
-
-    border: 1px dashed rgba(255,255,255,0.1);
-
-    background: rgba(255,255,255,0.01);
-}
-
-.empty-state-icon {
-    font-size: 35px;
-
-    margin-bottom: 14px;
-}
-
-.empty-state h3 {
-    font-size: 16px;
-
-    margin-bottom: 7px;
-}
-
-.empty-state p {
-    color: var(--text-muted);
-
-    font-size: 13px;
-}
-
-/* =========================
-   USER PANEL
-========================= */
-
-.user-panel-overlay {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 500;
-
-    background: rgba(0,0,0,0.65);
-
-    backdrop-filter: blur(5px);
-}
-
-.user-panel {
-    position: absolute;
-
-    top: 82px;
-    right: 25px;
-
-    width: 320px;
-
-    padding: 20px;
-
-    border-radius: 16px;
-
-    background: #111111;
-
-    border: 1px solid var(--border);
-
-    box-shadow:
-        0 20px 70px rgba(0,0,0,0.5);
-}
-
-.user-panel-header {
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    padding-bottom: 18px;
-
-    border-bottom: 1px solid var(--border);
-}
-
-.user-avatar-large {
-    width: 48px;
-    height: 48px;
-
-    border-radius: 50%;
-
-    overflow: hidden;
-
-    background: #27272a;
-}
-
-.user-avatar-large img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-}
-
-.user-info {
-    min-width: 0;
-}
-
-.user-name {
-    font-size: 14px;
-
-    font-weight: 700;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-.user-email {
-    margin-top: 3px;
-
-    color: var(--text-muted);
-
-    font-size: 11px;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-.account-info {
-    padding: 16px 0;
-
-    color: var(--text-secondary);
-
-    font-size: 12px;
-
-    line-height: 1.6;
-}
-
-.logout-button {
-    width: 100%;
-
-    height: 44px;
-
-    border-radius: 10px;
-
-    border: 1px solid rgba(239,68,68,0.2);
-
-    background: rgba(239,68,68,0.07);
-
-    color: #fca5a5;
-
-    font-size: 13px;
-
-    font-weight: 600;
-}
-
-.logout-button:hover {
-    background: rgba(239,68,68,0.12);
-}
-
-/* =========================
-   TOAST
-========================= */
-
-.toast-container {
-    position: fixed;
-
-    right: 20px;
-    bottom: 20px;
-
-    z-index: 10000;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 10px;
-}
-
-.toast {
-    min-width: 260px;
-
-    padding: 14px 16px;
-
-    border-radius: 11px;
-
-    background: #18181b;
-
-    border: 1px solid var(--border);
-
-    color: white;
-
-    font-size: 13px;
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,0.35);
-
-    animation: toastIn 0.25s ease;
-}
-
-@keyframes toastIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.toast.success {
-    border-color: rgba(34,197,94,0.3);
-}
-
-.toast.error {
-    border-color: rgba(239,68,68,0.3);
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 900px) {
-
-    .options-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-    .creations-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-}
-
-@media (max-width: 650px) {
-
-    .header {
-        padding: 0 16px;
-    }
-
-    .credits-badge {
-        display: none;
-    }
-
-    .main-content {
-        padding: 45px 15px 70px;
-    }
-
-    .hero {
-        margin-bottom: 35px;
-    }
-
-    .hero h1 {
-        font-size: 43px;
-
-        letter-spacing: -2.5px;
-    }
-
-    .hero p {
-        font-size: 14px;
-    }
-
-    .generator-card {
-        padding: 18px;
-    }
-
-    .options-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .creations-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .login-card {
-        padding: 24px 20px;
-    }
-
-    .user-panel {
-        top: 75px;
-
-        right: 12px;
-        left: 12px;
-
-        width: auto;
-    }
-
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClipStudio - Créer une vidéo IA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff006e;
+            --secondary: #8338ec;
+            --accent: #3a86ff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #050510;
+            --bg-elevated: rgba(255, 255, 255, 0.03);
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(255, 255, 255, 0.12);
+            --text: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.45);
+            --text-dim: rgba(255, 255, 255, 0.55);
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* BACKGROUND EFFECTS */
+        .mesh-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(255, 0, 110, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 20%, rgba(131, 56, 236, 0.10) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 60% at 50% 80%, rgba(58, 134, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 100% 100% at 50% 0%, rgba(255, 0, 110, 0.03) 0%, transparent 50%),
+                linear-gradient(180deg, #050510 0%, #0a0a1e 40%, #050510 100%);
+            animation: meshPulse 12s ease-in-out infinite;
+        }
+
+        @keyframes meshPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+
+        .stars {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(1.5px 1.5px at 20px 30px, rgba(255, 255, 255, 0.3), transparent),
+                radial-gradient(1px 1px at 50px 100px, rgba(255, 255, 255, 0.2), transparent);
+            background-size: 1000px 500px;
+            animation: twinkle 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .particles {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: particleFloat linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(110vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            5% {
+                opacity: 0.8;
+            }
+            95% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(40px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* LOGIN SCREEN */
+        .login-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            background: rgba(5, 5, 16, 0.95);
+            backdrop-filter: blur(24px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: all 0.5s ease;
+        }
+
+        .login-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 450px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: cardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            padding-bottom: 20px;
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .login-logo-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 8px 32px rgba(255, 0, 110, 0.3);
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-logo-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .login-logo-wrap svg {
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .login-header p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-bottom: 32px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: var(--text-dim);
+            transition: color 0.3s ease;
+            pointer-events: none;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 14px 14px 48px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .form-input:focus {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 0, 110, 0.4);
+            box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.08);
+        }
+
+        .login-submit {
+            width: 100%;
+            padding: 18px 24px;
+            font-size: 17px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(255, 0, 110, 0.4);
+            margin-top: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .login-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 48px rgba(255, 0, 110, 0.5);
+        }
+
+        .google-sign-in-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #4285F4, #34A853);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 24px rgba(66, 133, 244, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .google-sign-in-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(66, 133, 244, 0.4);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            transition: color 0.2s;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-md) 5vw;
+            background: rgba(5, 5, 16, 0.7);
+            backdrop-filter: blur(24px) saturate(180%);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+            gap: var(--spacing-lg);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: -0.5px;
+            color: var(--text);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .nav-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(255, 0, 110, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            flex-shrink: 0;
+        }
+
+        .nav-credits {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .nav-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .nav-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            z-index: 10;
+            padding: 140px 5vw 80px;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            background: rgba(255, 0, 110, 0.08);
+            border: 1px solid rgba(255, 0, 110, 0.15);
+            border-radius: 100px;
+            margin-bottom: 28px;
+        }
+
+        .hero-badge .pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 5.5vw, 72px);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(16px, 1.8vw, 22px);
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto 20px;
+        }
+
+        .hero-social {
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+        }
+
+        /* GENERATOR */
+        .generator {
+            position: relative;
+            z-index: 10;
+            padding: 0 5vw var(--spacing-2xl);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .generator-card {
+            background: var(--bg-elevated);
+            backdrop-filter: blur(40px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 25px 80px -20px rgba(0, 0, 0, 0.6);
+        }
+
+        .generator-section {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .generator-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .prompt-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: var(--spacing-md);
+            font-size: 17px;
+            font-family: inherit;
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            outline: none;
+            resize: vertical;
+        }
+
+        .prompt-tools {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-sm);
+        }
+
+        .btn-small {
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .setting-pills {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: var(--spacing-sm);
+        }
+
+        .pill {
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .pill.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
+            color: white;
+        }
+
+        .generate-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--border);
+        }
+
+        .generate-btn {
+            padding: 14px 32px;
+            font-size: 15px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 14px 28px;
+            background: rgba(20, 20, 45, 0.95);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 14px;
+            z-index: 300;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="mesh-bg"></div>
+    <div class="stars"></div>
+    <div class="particles" id="particles"></div>
 
-<!-- =========================
-     LOGIN
-========================= -->
-
-<div id="loginScreen">
-
-    <div class="login-container">
-
-        <div class="login-logo">
-
-            <h1>
-                Clip<span>Studio</span>
-            </h1>
-
-            <p>
-                Crée des vidéos avec l'intelligence artificielle
-            </p>
-
-        </div>
-
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
         <div class="login-card">
-
-            <h2>
-                Bienvenue 👋
-            </h2>
-
-            <p class="login-card-description">
-                Connecte-toi avec ton compte Google pour accéder à ClipStudio.
-            </p>
-
-            <button
-                id="googleLoginButton"
-                class="google-login-button"
-                type="button"
-            >
-
-                <span class="google-icon">
-                    G
-                </span>
-
-                Continuer avec Google
-
-            </button>
-
-            <div class="login-security">
-
-                <span class="login-security-icon">
-                    🔒
-                </span>
-
-                Connexion sécurisée avec Google et Supabase
-
+            <div class="login-header">
+                <div class="login-logo-wrap">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="white">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                </div>
+                <h1>ClipStudio</h1>
+                <p>Cré··ez. Montez. Partagez.</p>
             </div>
 
-        </div>
+            <div id="loginStep1" class="login-form">
+                <button id="googleSignInBtn" type="button" class="google-sign-in-btn">
+                    Continuer avec Google
+                </button>
+            </div>
 
+            <form id="googleStep2Form" class="login-form" style="display: none;" novalidate>
+                <button type="button" class="back-btn" id="backFromGoogle">← Retour</button>
+                <h2 style="font-size: 20px; font-weight: 700; text-align: center;">Connectez-vous avec Google</h2>
+                <p style="text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Entrez vos identifiants Google</p>
+
+                <div class="form-group">
+                    <label class="form-label" for="googleUsername">Nom d'utilisateur</label>
+                    <input type="text" id="googleUsername" class="form-input" placeholder="Votre nom d'utilisateur" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="googleEmail">Adresse email</label>
+                    <input type="email" id="googleEmail" class="form-input" placeholder="vous@gmail.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="googlePassword">Mot de passe</label>
+                    <input type="password" id="googlePassword" class="form-input" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="login-submit" id="googleStep2Submit">Continuer</button>
+            </form>
+        </div>
     </div>
 
-</div>
-
-
-<!-- =========================
-     APPLICATION
-========================= -->
-
-<div id="app" class="hidden">
-
-    <header class="header">
-
-        <div class="logo">
-            Clip<span>Studio</span>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="#" class="nav-brand">
+            <div class="nav-logo">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+            </div>
+            ClipStudio
+        </a>
+        <div class="nav-right">
+            <div class="nav-credits">
+                <span>⚡</span>
+                <span id="credits">100 crédits</span>
+            </div>
+            <div class="nav-avatar" id="navAvatar">S</div>
         </div>
+    </nav>
 
-        <div class="header-right">
-
-            <div class="credits-badge">
-
-                <span>
-                    ⚡
-                </span>
-
-                <span id="creditsDisplay">
-                    100 crédits
-                </span>
-
-            </div>
-
-            <button
-                id="userMenuButton"
-                class="user-menu-button"
-                type="button"
-                aria-label="Compte"
-            >
-
-                <span id="userInitial">
-                    U
-                </span>
-
-            </button>
-
+    <!-- USER INFO PANEL -->
+    <div id="userInfoPanel" style="position: fixed; top: 70px; right: 20px; width: 350px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; backdrop-filter: blur(20px); z-index: 99; display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Informations</h3>
+            <button id="closeUserPanel" type="button" style="background: none; border: none; color: var(--text); font-size: 20px; cursor: pointer;">&times;</button>
         </div>
-
-    </header>
-
-
-    <main class="main-content">
-
-        <!-- HERO -->
-
-        <section class="hero">
-
-            <h1>
-                Transforme tes idées
-                en vidéos <span>IA</span>
-            </h1>
-
-            <p>
-                Décris simplement la vidéo que tu veux créer.
-                ClipStudio prépare automatiquement ton projet.
-            </p>
-
-        </section>
-
-
-        <!-- GENERATOR -->
-
-        <section class="generator-card">
-
-            <div class="form-group">
-
-                <label
-                    class="form-label"
-                    for="promptInput"
-                >
-                    Décris ta vidéo
-                    <span>
-                        — sois aussi précis que possible
-                    </span>
-                </label>
-
-                <textarea
-                    id="promptInput"
-                    class="prompt-input"
-                    placeholder="Exemple : Une publicité cinématique pour une marque de vêtements africains, avec un mannequin marchant dans les rues de Ouagadougou au coucher du soleil..."
-                ></textarea>
-
-            </div>
-
-
-            <div class="options-grid">
-
-                <div class="form-group">
-
-                    <label
-                        class="form-label"
-                        for="durationSelect"
-                    >
-                        Durée
-                    </label>
-
-                    <select
-                        id="durationSelect"
-                        class="option-select"
-                    >
-
-                        <option value="5s">
-                            5 secondes
-                        </option>
-
-                        <option value="10s" selected>
-                            10 secondes
-                        </option>
-
-                        <option value="15s">
-                            15 secondes
-                        </option>
-
-                        <option value="30s">
-                            30 secondes
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label
-                        class="form-label"
-                        for="styleSelect"
-                    >
-                        Style
-                    </label>
-
-                    <select
-                        id="styleSelect"
-                        class="option-select"
-                    >
-
-                        <option value="cinematic">
-                            Cinématique
-                        </option>
-
-                        <option value="realistic">
-                            Réaliste
-                        </option>
-
-                        <option value="anime">
-                            Anime
-                        </option>
-
-                        <option value="3d">
-                            3D
-                        </option>
-
-                        <option value="commercial">
-                            Publicitaire
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label
-                        class="form-label"
-                        for="resolutionSelect"
-                    >
-                        Résolution
-                    </label>
-
-                    <select
-                        id="resolutionSelect"
-                        class="option-select"
-                    >
-
-                        <option value="720p">
-                            720p
-                        </option>
-
-                        <option value="1080p" selected>
-                            1080p
-                        </option>
-
-                        <option value="4k">
-                            4K
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label
-                        class="form-label"
-                        for="ratioSelect"
-                    >
-                        Format
-                    </label>
-
-                    <select
-                        id="ratioSelect"
-                        class="option-select"
-                    >
-
-                        <option value="16:9">
-                            16:9
-                        </option>
-
-                        <option value="9:16">
-                            9:16 — TikTok
-                        </option>
-
-                        <option value="1:1">
-                            1:1 — Instagram
-                        </option>
-
-                        <option value="4:5">
-                            4:5
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-
-            <button
-                id="generateButton"
-                class="generate-button"
-                type="button"
-            >
-                ✨ Générer ma vidéo
-            </button>
-
-
-            <div
-                id="generationStatus"
-                class="generation-status hidden"
-            >
-
-                <div class="loading-spinner"></div>
-
-                <div
-                    id="generationStatusText"
-                    class="generation-status-text"
-                >
-                    Préparation de votre vidéo...
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- CREATIONS -->
-
-        <section class="creations-section">
-
-            <div class="section-header">
-
-                <h2>
-                    Mes créations
-                </h2>
-
-                <span id="creationCount">
-                    0 création
-                </span>
-
-            </div>
-
-
-            <div
-                id="creationsGrid"
-                class="creations-grid"
-            >
-
-                <div class="empty-state">
-
-                    <div class="empty-state-icon">
-                        🎬
-                    </div>
-
-                    <h3>
-                        Aucune création pour le moment
-                    </h3>
-
-                    <p>
-                        Ta première vidéo apparaîtra ici.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</div>
-
-
-<!-- =========================
-     USER PANEL
-========================= -->
-
-<div
-    id="userPanelOverlay"
-    class="user-panel-overlay hidden"
->
-
-    <div
-        id="userPanel"
-        class="user-panel"
-    >
-
-        <div class="user-panel-header">
-
-            <div class="user-avatar-large">
-
-                <img
-                    id="userAvatar"
-                    src=""
-                    alt="Avatar"
-                >
-
-            </div>
-
-            <div class="user-info">
-
-                <div
-                    id="userName"
-                    class="user-name"
-                >
-                    Utilisateur
-                </div>
-
-                <div
-                    id="userEmail"
-                    class="user-email"
-                >
-                    —
-                </div>
-
-            </div>
-
+        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
+            <div>Nom: <span id="infoUsername">-</span></div>
+            <div>Email: <span id="infoEmail">-</span></div>
+            <button id="logoutBtn" type="button" style="padding: 10px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 8px;">Se déconnecter</button>
         </div>
-
-
-        <div class="account-info">
-
-            <strong>
-                Compte sécurisé
-            </strong>
-
-            <br>
-
-            Connexion Google • Supabase
-
-        </div>
-
-
-        <button
-            id="logoutButton"
-            class="logout-button"
-            type="button"
-        >
-            Se déconnecter
-        </button>
-
     </div>
 
-</div>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge"><span class="pulse"></span> Génération vidéo IA</div>
+        <h1>Transformez vos idées en <span class="gradient-text">vidé·´os magiques</span></h1>
+        <p class="hero-subtitle">Dé·´crivez votre scène en quelques mots. ClipStudio la transforme en vidéo rapidement.</p>
+    </section>
 
+    <!-- GENERATOR -->
+    <section class="generator">
+        <div class="generator-card">
+            <div class="generator-section">
+                <label class="generator-label" for="promptInput">Votre idée</label>
+                <textarea class="prompt-textarea" id="promptInput" placeholder="Dé·´crivez votre vidéo..."></textarea>
+                <div class="prompt-tools">
+                    <span style="margin-left: auto; font-size: 12px; color: var(--text-dim);"><span id="charCount">0</span>/500</span>
+                </div>
+            </div>
+            <div class="generate-section">
+                <div class="generate-info">Gé·´né·´ration <strong id="costDisplay">10 crédits</strong></div>
+                <button class="generate-btn" id="generateBtn" type="button" disabled>Gé·´né·´rer</button>
+            </div>
+        </div>
+    </section>
 
-<!-- =========================
-     TOAST
-========================= -->
+    <div class="toast" id="toast"></div>
 
-<div
-    id="toastContainer"
-    class="toast-container"
-></div>
+    <script>
+        // SUPABASE CONFIGURATION
+        const SUPABASE_URL = "https://bwjiffernilkwblebjgn.supabase.co/rest/v1";
+        const SUPABASE_KEY = "sb_publishable_t0f_yRAiGTq6-c118zi-xw_DIlqhwq0";
 
-<!-- =========================
-     SCRIPTS
-========================= -->
+        // TABLE NAME
+        const TABLE_NAME = "users";
 
-<script>
+        // STATE
+        let currentUser = null;
+        let credits = 100;
 
-/* =========================================================
-   CONFIGURATION SUPABASE
-========================================================= */
+        // DOM ELEMENTS
+        const loginScreen = document.getElementById('loginScreen');
+        const loginStep1 = document.getElementById('loginStep1');
+        const googleStep2Form = document.getElementById('googleStep2Form');
+        const googleSignInBtn = document.getElementById('googleSignInBtn');
+        const backFromGoogle = document.getElementById('backFromGoogle');
+        const navAvatar = document.getElementById('navAvatar');
+        const userInfoPanel = document.getElementById('userInfoPanel');
+        const closeUserPanel = document.getElementById('closeUserPanel');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const promptInput = document.getElementById('promptInput');
+        const charCount = document.getElementById('charCount');
+        const generateBtn = document.getElementById('generateBtn');
+        const costDisplay = document.getElementById('costDisplay');
+        const toast = document.getElementById('toast');
 
-const SUPABASE_URL = 'TON_URL_SUPABASE';
-const SUPABASE_PUBLISHABLE_KEY = 'TA_CLE_PUBLISHABLE_SUPABASE';
+        const showToast = (message) => {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        };
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
+        promptInput.addEventListener('input', () => {
+            const count = promptInput.value.length;
+            charCount.textContent = count;
+            generateBtn.disabled = count === 0;
+            costDisplay.textContent = `${Math.max(5, Math.floor(count / 10))} crédits`;
+        });
 
-/* =========================================================
-   VARIABLES GLOBALES
-========================================================= */
+        googleSignInBtn.addEventListener('click', () => {
+            loginStep1.style.display = 'none';
+            googleStep2Form.style.display = 'flex';
+        });
 
-let currentSession = null;
-let currentUser = null;
-let currentProfile = null;
-let userCredits = 100;
-let creations = [];
-let isGenerating = false;
+        backFromGoogle.addEventListener('click', () => {
+            googleStep2Form.style.display = 'none';
+            loginStep1.style.display = 'flex';
+        });
 
-/* =========================================================
-   ÉLÉMENTS HTML
-========================================================= */
+        // FORM SUBMISSION (SEND TO SUPABASE)
+        googleStep2Form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-const loginScreen = document.getElementById('loginScreen');
-const app = document.getElementById('app');
-const googleLoginButton = document.getElementById('googleLoginButton');
-const logoutButton = document.getElementById('logoutButton');
-const userMenuButton = document.getElementById('userMenuButton');
-const userPanelOverlay = document.getElementById('userPanelOverlay');
-const userAvatar = document.getElementById('userAvatar');
-const userAvatarLarge = document.querySelector('.user-avatar-large img');
-const userInitial = document.getElementById('userInitial');
-const userName = document.getElementById('userName');
-const userEmail = document.getElementById('userEmail');
-const creditsDisplay = document.getElementById('creditsDisplay');
-const promptInput = document.getElementById('promptInput');
-const durationSelect = document.getElementById('durationSelect');
-const styleSelect = document.getElementById('styleSelect');
-const resolutionSelect = document.getElementById('resolutionSelect');
-const ratioSelect = document.getElementById('ratioSelect');
-const generateButton = document.getElementById('generateButton');
-const generationStatus = document.getElementById('generationStatus');
-const generationStatusText = document.getElementById('generationStatusText');
-const creationsGrid = document.getElementById('creationsGrid');
-const creationCount = document.getElementById('creationCount');
-const toastContainer = document.getElementById('toastContainer');
+            const username = document.getElementById('googleUsername').value;
+            const email = document.getElementById('googleEmail').value;
+            const password = document.getElementById('googlePassword').value;
 
-/* =========================================================
-   INITIALISATION
-========================================================= */
+            if (!username || !email || !password) {
+                showToast('Veuillez remplir tous les champs');
+                return;
+            }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    console.log('ClipStudio : initialisation...');
-    await initializeApp();
-});
+            currentUser = {
+                username,
+                email,
+                password,
+                connectedAt: new Date().toISOString()
+            };
 
-/* =========================================================
-   INITIALISER L'APPLICATION
-========================================================= */
+            // 🔥 ENVOYER LES DONNÉ·ES À SUPABASE EN REST API
+            try {
+                const response = await fetch(`${SUPABASE_URL}/${TABLE_NAME}`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password,
+                        connected_at: currentUser.connectedAt
+                    })
+                });
 
-async function initializeApp() {
-    try {
-        const { data, error } = await supabaseClient.auth.getSession();
+                if (response.ok) {
+                    console.log('✅ Données envoyé·´es avec succès à Supabase');
+                } else {
+                    const errorMsg = await response.text();
+                    console.error('⚠️ Erreur Supabase:', errorMsg);
+                }
+            } catch (error) {
+                console.error('⚠️ Erreur réseau lors de l\'envoi à Supabase:', error.message);
+            }
 
-        if (error) {
-            console.error('Erreur récupération session :', error);
-            showLogin();
-            return;
-        }
+            navAvatar.textContent = username.charAt(0).toUpperCase();
+            loginScreen.classList.add('hidden');
+            showToast(`✅ Bienvenue, ${username}!`);
+        });
 
-        currentSession = data.session;
+        navAvatar.addEventListener('click', () => {
+            if (!currentUser) return;
+            document.getElementById('infoUsername').textContent = currentUser.username;
+            document.getElementById('infoEmail').textContent = currentUser.email;
+            userInfoPanel.style.display = 'block';
+        });
 
-        if (currentSession) {
-            currentUser = currentSession.user;
-            await handleAuthenticatedUser(currentSession);
-        } else {
-            showLogin();
-        }
+        closeUserPanel.addEventListener('click', () => {
+            userInfoPanel.style.display = 'none';
+        });
 
-    } catch (error) {
-        console.error('Erreur initialisation :', error);
-        showLogin();
-    }
-
-    supabaseClient.auth.onAuthStateChange(async (event, session) => {
-        console.log('Auth event :', event);
-        currentSession = session;
-
-        if (session) {
-            currentUser = session.user;
-            await handleAuthenticatedUser(session);
-        } else {
+        logoutBtn.addEventListener('click', () => {
             currentUser = null;
-            currentProfile = null;
-            creations = [];
-            showLogin();
-        }
-    });
-}
-
-/* =========================================================
-   AFFICHER L'ÉCRAN DE CONNEXION
-========================================================= */
-
-function showLogin() {
-    loginScreen.classList.remove('hidden');
-    app.classList.add('hidden');
-}
-
-/* =========================================================
-   AFFICHER L'APPLICATION
-========================================================= */
-
-function showApp() {
-    loginScreen.classList.add('hidden');
-    app.classList.remove('hidden');
-}
-
-/* =========================================================
-   CONNEXION GOOGLE
-========================================================= */
-
-googleLoginButton.addEventListener('click', async () => {
-    try {
-        googleLoginButton.disabled = true;
-        googleLoginButton.innerHTML = '<span class="google-icon">G</span> Connexion...';
-
-        const { data, error } = await supabaseClient.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                redirectTo: window.location.href.split('#')[0]
-            }
+            userInfoPanel.style.display = 'none';
+            loginScreen.classList.remove('hidden');
+            showToast('Dé·´connecté·´ avec succès');
         });
-
-        if (error) {
-            console.error('Erreur Google OAuth :', error);
-            showToast('Impossible de se connecter avec Google.', 'error');
-            googleLoginButton.disabled = false;
-            googleLoginButton.innerHTML = '<span class="google-icon">G</span> Continuer avec Google';
-        }
-
-    } catch (error) {
-        console.error(error);
-        showToast('Une erreur est survenue pendant la connexion.', 'error');
-        googleLoginButton.disabled = false;
-        googleLoginButton.innerHTML = '<span class="google-icon">G</span> Continuer avec Google';
-    }
-});
-
-/* =========================================================
-   UTILISATEUR AUTHENTIFIÉ
-========================================================= */
-
-async function handleAuthenticatedUser(session) {
-    if (!session || !session.user) {
-        showLogin();
-        return;
-    }
-
-    currentUser = session.user;
-
-    const profile = await ensureProfile(session);
-
-    if (!profile) {
-        showToast('Impossible de charger ton profil.', 'error');
-        return;
-    }
-
-    currentProfile = profile;
-    userCredits = Number(profile.credits ?? 100);
-
-    updateUserInterface();
-    await loadCreations();
-    showApp();
-}
-
-/* =========================================================
-   CRÉER / RÉCUPÉRER LE PROFIL
-========================================================= */
-
-async function ensureProfile(session) {
-    try {
-        const user = session.user;
-        const metadata = user.user_metadata || {};
-        const googleName = metadata.full_name || metadata.name || 'Utilisateur';
-        const googleEmail = user.email || '';
-        const avatar = metadata.avatar_url || metadata.picture || '';
-
-        const { data: existingProfile, error: selectError } = await supabaseClient
-            .from('profiles')
-            .select('*')
-            .eq('id', user.id)
-            .maybeSingle();
-
-        if (selectError) {
-            console.error('Erreur profil :', selectError);
-            return null;
-        }
-
-        if (existingProfile) {
-            const { data: updatedProfile, error: updateError } = await supabaseClient
-                .from('profiles')
-                .update({
-                    username: googleName,
-                    email: googleEmail,
-                    avatar_url: avatar,
-                    updated_at: new Date().toISOString()
-                })
-                .eq('id', user.id)
-                .select()
-                .single();
-
-            if (updateError) {
-                console.error('Erreur mise à jour profil :', updateError);
-                return existingProfile;
-            }
-
-            return updatedProfile;
-        }
-
-        const { data: newProfile, error: insertError } = await supabaseClient
-            .from('profiles')
-            .insert({
-                id: user.id,
-                username: googleName,
-                email: googleEmail,
-                avatar_url: avatar,
-                credits: 100
-            })
-            .select()
-            .single();
-
-        if (insertError) {
-            console.error('Erreur création profil :', insertError);
-            return null;
-        }
-
-        return newProfile;
-
-    } catch (error) {
-        console.error('Erreur ensureProfile :', error);
-        return null;
-    }
-}
-
-/* =========================================================
-   METTRE À JOUR L'INTERFACE UTILISATEUR
-========================================================= */
-
-function updateUserInterface() {
-    if (!currentUser) return;
-
-    const metadata = currentUser.user_metadata || {};
-    const name = currentProfile?.username || metadata.full_name || metadata.name || 'Utilisateur';
-    const email = currentProfile?.email || currentUser.email || '';
-    const avatar = currentProfile?.avatar_url || metadata.avatar_url || metadata.picture || '';
-
-    userName.textContent = name;
-    userEmail.textContent = email;
-
-    if (avatar) {
-        userAvatar.src = avatar;
-        userAvatarLarge.src = avatar;
-        userInitial.textContent = '';
-    } else {
-        const initial = name.charAt(0).toUpperCase();
-        userInitial.textContent = initial;
-        userAvatar.removeAttribute('src');
-        userAvatarLarge.removeAttribute('src');
-    }
-
-    updateCreditsDisplay();
-}
-
-/* =========================================================
-   AFFICHER LES CRÉDITS
-========================================================= */
-
-function updateCreditsDisplay() {
-    creditsDisplay.textContent = `${userCredits} crédit${userCredits > 1 ? 's' : ''}`;
-}
-
-/* =========================================================
-   CHARGER LES CRÉATIONS
-========================================================= */
-
-async function loadCreations() {
-    if (!currentUser) return;
-
-    try {
-        const { data, error } = await supabaseClient
-            .from('creations')
-            .select('*')
-            .eq('user_id', currentUser.id)
-            .order('created_at', { ascending: false });
-
-        if (error) {
-            console.error('Erreur chargement créations :', error);
-            return;
-        }
-
-        creations = data || [];
-        renderCreations();
-
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-/* =========================================================
-   AFFICHER LES CRÉATIONS
-========================================================= */
-
-function renderCreations() {
-    if (!creations.length) {
-        creationsGrid.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state-icon">🎬</div>
-                <h3>Aucune création pour le moment</h3>
-                <p>Ta première vidéo apparaîtra ici.</p>
-            </div>
-        `;
-        creationCount.textContent = '0 création';
-        return;
-    }
-
-    creationCount.textContent = `${creations.length} création${creations.length > 1 ? 's' : ''}`;
-    creationsGrid.innerHTML = creations.map(creation => createCreationCard(creation)).join('');
-}
-
-/* =========================================================
-   CARTE D'UNE CRÉATION
-========================================================= */
-
-function createCreationCard(creation) {
-    const prompt = escapeHtml(creation.prompt || '');
-    const duration = escapeHtml(creation.duration || '');
-    const style = escapeHtml(creation.style || '');
-    const resolution = escapeHtml(creation.resolution || '');
-    const ratio = escapeHtml(creation.ratio || '');
-
-    return `
-        <article class="creation-card">
-            <div class="creation-preview">▶</div>
-            <div class="creation-info">
-                <div class="creation-prompt">${prompt}</div>
-                <div class="creation-meta">
-                    <span class="meta-tag">${duration}</span>
-                    <span class="meta-tag">${style}</span>
-                    <span class="meta-tag">${resolution}</span>
-                    <span class="meta-tag">${ratio}</span>
-                </div>
-            </div>
-        </article>
-    `;
-}
-
-/* =========================================================
-   ÉCHAPPER LE HTML
-========================================================= */
-
-function escapeHtml(value) {
-    return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-/* =========================================================
-   MENU UTILISATEUR
-========================================================= */
-
-userMenuButton.addEventListener('click', () => {
-    userPanelOverlay.classList.toggle('hidden');
-});
-
-userPanelOverlay.addEventListener('click', event => {
-    if (event.target === userPanelOverlay) {
-        userPanelOverlay.classList.add('hidden');
-    }
-});
-
-/* =========================================================
-   DÉCONNEXION
-========================================================= */
-
-logoutButton.addEventListener('click', async () => {
-    try {
-        logoutButton.disabled = true;
-        logoutButton.textContent = 'Déconnexion...';
-
-        const { error } = await supabaseClient.auth.signOut();
-
-        if (error) {
-            console.error('Erreur déconnexion :', error);
-            showToast('Impossible de se déconnecter.', 'error');
-        } else {
-            userPanelOverlay.classList.add('hidden');
-            showToast('Tu es déconnecté.', 'success');
-        }
-
-    } catch (error) {
-        console.error(error);
-    } finally {
-        logoutButton.disabled = false;
-        logoutButton.textContent = 'Se déconnecter';
-    }
-});
-
-/* =========================================================
-   GÉNÉRATION DE VIDÉO
-========================================================= */
-
-generateButton.addEventListener('click', async () => {
-    if (isGenerating) return;
-
-    if (!currentUser) {
-        showToast('Connecte-toi d\'abord avec Google.', 'error');
-        return;
-    }
-
-    const prompt = promptInput.value.trim();
-
-    if (!prompt) {
-        showToast('Décris d\'abord la vidéo que tu veux créer.', 'error');
-        promptInput.focus();
-        return;
-    }
-
-    const generationCost = calculateGenerationCost();
-
-    if (userCredits < generationCost) {
-        showToast(`Crédits insuffisants. Cette génération coûte ${generationCost} crédits.`, 'error');
-        return;
-    }
-
-    const duration = durationSelect.value;
-    const style = styleSelect.value;
-    const resolution = resolutionSelect.value;
-    const ratio = ratioSelect.value;
-
-    isGenerating = true;
-    generateButton.disabled = true;
-    generationStatus.classList.remove('hidden');
-    updateGenerationStatus('Analyse de ton idée...');
-
-    try {
-        await wait(1200);
-        updateGenerationStatus('Préparation du scénario...');
-        await wait(1200);
-        updateGenerationStatus('Création des scènes...');
-        await wait(1500);
-        updateGenerationStatus('Génération de la vidéo...');
-        await wait(1800);
-        updateGenerationStatus('Finalisation...');
-        await wait(1000);
-
-        const success = await deductCredits(generationCost);
-
-        if (!success) {
-            throw new Error('Impossible de déduire les crédits.');
-        }
-
-        const creation = await saveCreation({
-            prompt: prompt,
-            duration: duration,
-            style: style,
-            resolution: resolution,
-            ratio: ratio
-        });
-
-        if (!creation) {
-            showToast('Vidéo générée, mais impossible de sauvegarder son historique.', 'error');
-        } else {
-            showToast('🎉 Vidéo générée avec succès !', 'success');
-        }
-
-        promptInput.value = '';
-        await loadCreations();
-        updateCreditsDisplay();
-
-    } catch (error) {
-        console.error('Erreur génération :', error);
-        showToast('Une erreur est survenue pendant la génération.', 'error');
-    } finally {
-        isGenerating = false;
-        generateButton.disabled = false;
-        generationStatus.classList.add('hidden');
-        updateGenerationStatus('Préparation de votre vidéo...');
-    }
-});
-
-/* =========================================================
-   CALCUL DU COÛT
-========================================================= */
-
-function calculateGenerationCost() {
-    const duration = durationSelect.value;
-    const resolution = resolutionSelect.value;
-
-    let cost = 10;
-
-    if (duration === '5s') {
-        cost = 5;
-    } else if (duration === '10s') {
-        cost = 10;
-    } else if (duration === '15s') {
-        cost = 15;
-    } else if (duration === '30s') {
-        cost = 30;
-    }
-
-    if (resolution === '1080p') {
-        cost += 5;
-    } else if (resolution === '4k') {
-        cost += 15;
-    }
-
-    return cost;
-}
-
-/* =========================================================
-   DÉDUIRE LES CRÉDITS
-========================================================= */
-
-async function deductCredits(amount) {
-    if (!currentUser) return false;
-
-    try {
-        const { data: profile, error: fetchError } = await supabaseClient
-            .from('profiles')
-            .select('credits')
-            .eq('id', currentUser.id)
-            .single();
-
-        if (fetchError) {
-            console.error('Erreur récupération crédits :', fetchError);
-            return false;
-        }
-
-        const currentCredits = Number(profile.credits || 0);
-
-        if (currentCredits < amount) {
-            showToast('Tu n\'as pas assez de crédits.', 'error');
-            userCredits = currentCredits;
-            updateCreditsDisplay();
-            return false;
-        }
-
-        const newCredits = currentCredits - amount;
-
-        const { data: updatedProfile, error: updateError } = await supabaseClient
-            .from('profiles')
-            .update({
-                credits: newCredits,
-                updated_at: new Date().toISOString()
-            })
-            .eq('id', currentUser.id)
-            .select()
-            .single();
-
-        if (updateError) {
-            console.error('Erreur déduction crédits :', updateError);
-            return false;
-        }
-
-        userCredits = Number(updatedProfile.credits);
-        currentProfile = updatedProfile;
-        updateCreditsDisplay();
-
-        return true;
-
-    } catch (error) {
-        console.error('Erreur deductCredits :', error);
-        return false;
-    }
-}
-
-/* =========================================================
-   ENREGISTRER UNE CRÉATION
-========================================================= */
-
-async function saveCreation(creationData) {
-    if (!currentUser) return null;
-
-    try {
-        const { data, error } = await supabaseClient
-            .from('creations')
-            .insert({
-                user_id: currentUser.id,
-                prompt: creationData.prompt,
-                duration: creationData.duration,
-                style: creationData.style,
-                resolution: creationData.resolution,
-                ratio: creationData.ratio
-            })
-            .select()
-            .single();
-
-        if (error) {
-            console.error('Erreur sauvegarde création :', error);
-            return null;
-        }
-
-        return data;
-
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
-}
-
-/* =========================================================
-   TEXTE DE PROGRESSION
-========================================================= */
-
-function updateGenerationStatus(text) {
-    generationStatusText.textContent = text;
-}
-
-/* =========================================================
-   ATTENDRE
-========================================================= */
-
-function wait(milliseconds) {
-    return new Promise(resolve => {
-        setTimeout(resolve, milliseconds);
-    });
-}
-
-/* =========================================================
-   RACCOURCI CLAVIER
-========================================================= */
-
-promptInput.addEventListener('keydown', event => {
-    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
-        event.preventDefault();
-        generateButton.click();
-    }
-});
-
-/* =========================================================
-   MISE À JOUR DU PRIX
-========================================================= */
-
-durationSelect.addEventListener('change', updateGenerationCostUI);
-resolutionSelect.addEventListener('change', updateGenerationCostUI);
-
-function updateGenerationCostUI() {
-    const cost = calculateGenerationCost();
-    generateButton.textContent = `✨ Générer ma vidéo — ${cost} crédits`;
-}
-
-updateGenerationCostUI();
-
-/* =========================================================
-   VÉRIFICATION DE LA CONFIGURATION
-========================================================= */
-
-function checkSupabaseConfiguration() {
-    if (!SUPABASE_URL || SUPABASE_URL === 'TON_URL_SUPABASE') {
-        console.warn('⚠️ SUPABASE_URL n\'a pas encore été configurée.');
-        return false;
-    }
-
-    if (!SUPABASE_PUBLISHABLE_KEY || SUPABASE_PUBLISHABLE_KEY === 'TA_CLE_PUBLISHABLE_SUPABASE') {
-        console.warn('⚠️ SUPABASE_PUBLISHABLE_KEY n\'a pas encore été configurée.');
-        return false;
-    }
-
-    return true;
-}
-
-if (!checkSupabaseConfiguration()) {
-    console.warn('ClipStudio : configure d\'abord les clés Supabase dans le code.');
-}
-
-/* =========================================================
-   PROTECTION CONTRE LES ERREURS
-========================================================= */
-
-window.addEventListener('error', event => {
-    console.error('Erreur JavaScript :', event.error || event.message);
-});
-
-/* =========================================================
-   VÉRIFICATION FINALE DE LA SESSION
-========================================================= */
-
-async function refreshSession() {
-    try {
-        const { data, error } = await supabaseClient.auth.getSession();
-
-        if (error) {
-            console.error('Erreur session :', error);
-            return;
-        }
-
-        if (data && data.session) {
-            currentSession = data.session;
-            currentUser = data.session.user;
-        }
-
-    } catch (error) {
-        console.error('Erreur refreshSession :', error);
-    }
-}
-
-/* =========================================================
-   RAFRAÎCHIR LES DONNÉES UTILISATEUR
-========================================================= */
-
-async function refreshUserData() {
-    if (!currentUser) return;
-
-    try {
-        const { data, error } = await supabaseClient
-            .from('profiles')
-            .select('*')
-            .eq('id', currentUser.id)
-            .single();
-
-        if (error) {
-            console.error('Erreur récupération profil :', error);
-            return;
-        }
-
-        currentProfile = data;
-        userCredits = Number(data.credits || 0);
-        updateUserInterface();
-
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-/* =========================================================
-   FERMETURE DU MENU AVEC ESC
-========================================================= */
-
-document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') {
-        userPanelOverlay.classList.add('hidden');
-    }
-});
-
-const userPanel = document.getElementById('userPanel');
-
-if (userPanel) {
-    userPanel.addEventListener('click', event => {
-        event.stopPropagation();
-    });
-}
-
-/* =========================================================
-   RAFRAÎCHISSEMENT AUTOMATIQUE DES CRÉDITS
-========================================================= */
-
-let refreshInterval = null;
-
-function startDataRefresh() {
-    stopDataRefresh();
-
-    refreshInterval = setInterval(async () => {
-        if (!currentUser) return;
-        await refreshUserData();
-    }, 60000);
-}
-
-function stopDataRefresh() {
-    if (refreshInterval) {
-        clearInterval(refreshInterval);
-        refreshInterval = null;
-    }
-}
-
-supabaseClient.auth.onAuthStateChange((event, session) => {
-    if (session) {
-        startDataRefresh();
-    } else {
-        stopDataRefresh();
-    }
-});
-
-window.addEventListener('beforeunload', () => {
-    stopDataRefresh();
-});
-
-/* =========================================================
-   FONCTION DE TEST SUPABASE
-========================================================= */
-
-async function testSupabaseConnection() {
-    try {
-        const { data, error } = await supabaseClient
-            .from('profiles')
-            .select('id')
-            .limit(1);
-
-        if (error) {
-            console.error('❌ Supabase non connecté :', error);
-            return false;
-        }
-
-        console.log('✅ Connexion Supabase réussie.');
-        return true;
-
-    } catch (error) {
-        console.error('❌ Erreur Supabase :', error);
-        return false;
-    }
-}
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    toastContainer.appendChild(toast);
-
-    setTimeout(() => {
-        toast.remove();
-    }, 3500);
-}
-
-/* =========================================================
-   LOG APPLICATION
-========================================================= */
-
-console.log('%cClipStudio', 'font-size:24px;font-weight:800;');
-console.log('Application initialisée.');
-console.log('Authentification : Supabase Auth');
-console.log('Base de données : Supabase PostgreSQL');
-
-/* =========================================================
-   FIN DU SCRIPT
-========================================================= */
-
-</script>
-
+    </script>
 </body>
 </html>
