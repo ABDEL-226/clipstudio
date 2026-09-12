@@ -6,8 +6,6 @@
     <title>ClipStudio - Créer une vidéo IA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Supabase JS SDK (expose window.supabase.createClient) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --primary: #ff006e;
@@ -333,7 +331,7 @@
 
             <div class="login-form">
                 <div class="config-warning" id="configWarning">
-                    Supabase n'est pas encore configuré. Renseigne <code>SUPABASE_URL</code> et <code>SUPABASE_PUBLISHABLE_KEY</code> dans <code>supabase-config.js</code>.
+                    Le backend n'est pas encore configuré. Renseigne <code>SHEETS_WEBAPP_URL</code> et <code>SHEETS_APP_TOKEN</code> dans le fichier.
                 </div>
                 <div class="login-error" id="loginError"></div>
 
@@ -439,158 +437,77 @@
 
     <script type="module">
         // =====================================================================
-        // CONFIGURATION SUPABASE
-        // Seules valeurs à changer si tu passes sur un autre projet Supabase.
-        // ⚠️ Ne mets JAMAIS la "service_role key" ici, uniquement la clé
-        // "anon" / "publishable", prévue pour être exposée côté client.
+        // CONFIGURATION GOOGLE APPS SCRIPT
+        // Authentification + stockage des données : tout passe par ce Web App,
+        // qui lui-même lit/écrit dans une Google Sheet. Aucune donnée n'est
+        // envoyée ailleurs.
         // =====================================================================
-        const SUPABASE_URL = "https://villbijjjjbqreyuubtn.supabase.co";
-        const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_PuOnT5anfYm9cJS8F-HgFw_R7Ye3PwQ";
+        const SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyaBVfjfriA8__b_58LuT3Egn-5nYistg0Ujz2byJc9UwvLG5flwc8tzuKtCR2ZimQT/exec";
+        const SHEETS_APP_TOKEN = "Kx7mP2qR9vT4wY6nL1jH8fD3sB5cA0eZ9uG2iN4oQ7rM1tV6xW3yK8pJ5hF0dS2c";
+        const SESSION_STORAGE_KEY = "clipstudio_session_token";
 
-        function isPlaceholder(value) {
-            return !value || value.trim() === '' || value.includes('YOUR_SUPABASE');
+        function isPlaceholder_(value) {
+            return !value || value.trim() === '' || value.startsWith('YOUR_');
         }
 
-        const supabaseReady = !isPlaceholder(SUPABASE_URL) && !isPlaceholder(SUPABASE_PUBLISHABLE_KEY);
-        const supabase = supabaseReady
-            ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
-            : null;
+        const backendReady = !isPlaceholder_(SHEETS_WEBAPP_URL) && !isPlaceholder_(SHEETS_APP_TOKEN);
 
-        if (!supabaseReady) {
-            console.warn('[ClipStudio] Supabase n\'est pas configuré (SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY).');
+        if (!backendReady) {
+            console.warn('[ClipStudio] Backend non configuré (SHEETS_WEBAPP_URL / SHEETS_APP_TOKEN).');
         }
 
-        // =====================================================================
-        // AUTH — inscription / connexion / session (e-mail + mot de passe)
-        // Le mot de passe n'est jamais journalisé ni stocké ailleurs que dans
-        // Supabase Auth (aucune table, aucun localStorage).
-        // =====================================================================
-        const NOT_CONFIGURED_ERROR = { message: "Supabase n'est pas configuré." };
-        const NOT_AUTHENTICATED_ERROR = { message: "Vous devez être connecté pour effectuer cette action." };
-
-        function wrapAuthError(error) {
-            if (!error) return null;
-            console.error('[Auth]', error.message);
-            return { message: error.message || 'Une erreur est survenue.' };
-        }
-
-        function translateAuthError(error) {
-            if (!error) return '';
-            const msg = (error.message || '').toLowerCase();
-            if (msg.includes('user already registered') || msg.includes('already registered') || msg.includes('already exists')) {
-                return 'Cette adresse e-mail est déjà utilisée.';
+        async function backendCall_(action, params) {
+            if (!backendReady) {
+                return { data: null, error: { message: "Le backend n'est pas configuré (SHEETS_WEBAPP_URL / SHEETS_APP_TOKEN)." } };
             }
-            if (msg.includes('invalid login credentials') || msg.includes('invalid email or password')) {
-                return 'Adresse e-mail ou mot de passe incorrect.';
+            try {
+                const response = await fetch(SHEETS_WEBAPP_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ token: SHEETS_APP_TOKEN, action, ...params })
+                });
+                const json = await response.json();
+                if (json.error) {
+                    return { data: null, error: { message: json.error } };
+                }
+                return { data: json.data, error: null };
+            } catch (err) {
+                console.error('[Backend]', err);
+                return { data: null, error: { message: 'Erreur réseau. Vérifiez votre connexion.' } };
             }
-            if (msg.includes('password should be at least') || msg.includes('password is too short') || msg.includes('should contain at least')) {
-                return 'Le mot de passe ne respecte pas les exigences minimales (au moins 6 caractères).';
-            }
-            if (msg.includes('unable to validate email') || msg.includes('invalid email')) {
-                return 'Veuillez entrer une adresse e-mail valide.';
-            }
-            if (msg.includes('not configured')) return error.message;
-            return 'Une erreur est survenue. Veuillez réessayer.';
         }
 
         async function signUpWithEmail(name, email, password) {
-            if (!supabaseReady) return { data: null, error: NOT_CONFIGURED_ERROR };
-            try {
-                const { data, error } = await supabase.auth.signUp({
-                    email, password,
-                    options: { data: { name } }
-                });
-                return { data, error: wrapAuthError(error) };
-            } catch (err) {
-                return { data: null, error: { message: 'Erreur réseau lors de l\'inscription.' } };
-            }
+            return backendCall_('signUp', { name, email, password });
         }
 
         async function signInWithEmail(email, password) {
-            if (!supabaseReady) return { data: null, error: NOT_CONFIGURED_ERROR };
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-                return { data, error: wrapAuthError(error) };
-            } catch (err) {
-                return { data: null, error: { message: 'Erreur réseau lors de la connexion.' } };
-            }
+            return backendCall_('signIn', { email, password });
         }
 
         async function signOut() {
-            if (!supabaseReady) return { error: NOT_CONFIGURED_ERROR };
-            try {
-                const { error } = await supabase.auth.signOut();
-                return { error: wrapAuthError(error) };
-            } catch (err) {
-                return { error: { message: 'Erreur réseau lors de la déconnexion.' } };
-            }
+            const sessionToken = localStorage.getItem(SESSION_STORAGE_KEY);
+            const result = await backendCall_('signOut', { sessionToken });
+            localStorage.removeItem(SESSION_STORAGE_KEY);
+            return result;
         }
 
-        async function getSession() {
-            if (!supabaseReady) return { data: { session: null }, error: NOT_CONFIGURED_ERROR };
-            try {
-                const { data, error } = await supabase.auth.getSession();
-                return { data, error: wrapAuthError(error) };
-            } catch (err) {
-                return { data: { session: null }, error: { message: 'Erreur réseau lors de la récupération de la session.' } };
-            }
+        async function getProfile() {
+            const sessionToken = localStorage.getItem(SESSION_STORAGE_KEY);
+            if (!sessionToken) return { data: null, error: { message: 'Aucune session active.' } };
+            return backendCall_('getProfile', { sessionToken });
         }
 
-        function onAuthStateChange(callback) {
-            if (!supabaseReady) return () => {};
-            const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => callback(event, session));
-            return () => subscription.unsubscribe();
+        async function debitCredits(cost) {
+            const sessionToken = localStorage.getItem(SESSION_STORAGE_KEY);
+            if (!sessionToken) return { data: null, error: { message: 'Aucune session active.' } };
+            return backendCall_('debitCredits', { sessionToken, cost });
         }
 
-        // =====================================================================
-        // DATA — profil et crédits
-        // =====================================================================
-        function wrapDataError(error, fallback) {
-            if (!error) return null;
-            console.error('[Data]', error);
-            return { message: error.message || fallback };
+        function translateAuthError(error) {
+            return error && error.message ? error.message : 'Une erreur est survenue. Veuillez réessayer.';
         }
 
-        async function getProfile(userId) {
-            if (!supabaseReady) return { data: null, error: NOT_CONFIGURED_ERROR };
-            if (!userId) return { data: null, error: NOT_AUTHENTICATED_ERROR };
-            try {
-                const { data, error } = await supabase
-                    .from('profiles')
-                    .select('id, username, email, credits, created_at')
-                    .eq('id', userId)
-                    .single();
-                return { data, error: wrapDataError(error, 'Impossible de charger le profil.') };
-            } catch (err) {
-                return { data: null, error: { message: 'Erreur réseau lors du chargement du profil.' } };
-            }
-        }
-
-        async function debitCredits(userId, cost) {
-            if (!supabaseReady) return { data: null, error: NOT_CONFIGURED_ERROR };
-            if (!userId) return { data: null, error: NOT_AUTHENTICATED_ERROR };
-            try {
-                const { data: profile, error: readError } = await getProfile(userId);
-                if (readError) return { data: null, error: readError };
-                if (!profile || profile.credits < cost) {
-                    return { data: null, error: { message: 'Crédits insuffisants.' } };
-                }
-                const { data, error } = await supabase
-                    .from('profiles')
-                    .update({ credits: profile.credits - cost })
-                    .eq('id', userId)
-                    .gte('credits', cost)
-                    .select()
-                    .single();
-                return { data, error: wrapDataError(error, 'Impossible de débiter les crédits.') };
-            } catch (err) {
-                return { data: null, error: { message: 'Erreur réseau lors du débit des crédits.' } };
-            }
-        }
-
-        // =====================================================================
-        // APP — DOM et événements
-        // =====================================================================
         const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         const loginScreen = document.getElementById('loginScreen');
@@ -621,7 +538,6 @@
         const costDisplay = document.getElementById('costDisplay');
         const toast = document.getElementById('toast');
 
-        let currentUser = null;
         let currentProfile = null;
 
         function showToast(message, isError = false) {
@@ -646,12 +562,12 @@
         }
 
         function setButtonLoading(button, isLoading, loadingText, idleText) {
-            button.disabled = isLoading || !supabaseReady;
+            button.disabled = isLoading || !backendReady;
             button.textContent = isLoading ? loadingText : idleText;
         }
 
         function checkConfiguration() {
-            if (!supabaseReady) {
+            if (!backendReady) {
                 configWarning.classList.add('show');
                 signupSubmitBtn.disabled = true;
                 signinSubmitBtn.disabled = true;
@@ -685,32 +601,20 @@
             document.getElementById('infoCredits').textContent = profile.credits;
         }
 
-        async function handleSession(session) {
-            currentUser = session?.user ?? null;
+        function showLoggedOutState() {
+            loginScreen.classList.remove('hidden');
+            userInfoPanel.style.display = 'none';
+            generateBtn.disabled = true;
+            currentProfile = null;
+        }
 
-            if (!currentUser) {
-                loginScreen.classList.remove('hidden');
-                userInfoPanel.style.display = 'none';
-                generateBtn.disabled = true;
+        async function refreshProfile() {
+            const { data: profile, error } = await getProfile();
+            if (error || !profile) {
+                showLoggedOutState();
                 return;
             }
-
             loginScreen.classList.add('hidden');
-
-            const { data: profile, error } = await getProfile(currentUser.id);
-            if (error) {
-                setTimeout(async () => {
-                    const retry = await getProfile(currentUser.id);
-                    if (retry.data) {
-                        renderProfile(retry.data);
-                        generateBtn.disabled = promptInput.value.length === 0;
-                    } else if (retry.error) {
-                        showToast('Impossible de charger votre profil : ' + retry.error.message, true);
-                    }
-                }, 1200);
-                return;
-            }
-
             renderProfile(profile);
             generateBtn.disabled = promptInput.value.length === 0;
         }
@@ -718,7 +622,7 @@
         signupView.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!checkConfiguration()) {
-                showLoginError('Supabase n\'est pas configuré.');
+                showLoginError('Le backend n\'est pas configuré.');
                 return;
             }
             clearLoginError();
@@ -733,27 +637,24 @@
 
             setButtonLoading(signupSubmitBtn, true, 'Création du compte...', 'Créer mon compte');
             const { data, error } = await signUpWithEmail(name, email, password);
+            setButtonLoading(signupSubmitBtn, false, 'Création du compte...', 'Créer mon compte');
 
             if (error) {
-                setButtonLoading(signupSubmitBtn, false, 'Création du compte...', 'Créer mon compte');
                 showLoginError(translateAuthError(error));
                 return;
             }
 
-            if (!data.session) {
-                setButtonLoading(signupSubmitBtn, false, 'Création du compte...', 'Créer mon compte');
-                showToast('Compte créé ! Vérifiez votre boîte e-mail pour confirmer votre compte.');
-                showSignIn();
-                return;
-            }
-
-            setButtonLoading(signupSubmitBtn, false, 'Création du compte...', 'Créer mon compte');
+            localStorage.setItem(SESSION_STORAGE_KEY, data.sessionToken);
+            loginScreen.classList.add('hidden');
+            renderProfile(data.profile);
+            generateBtn.disabled = promptInput.value.length === 0;
+            showToast(`Bienvenue, ${data.profile.username} !`);
         });
 
         signinView.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!checkConfiguration()) {
-                showLoginError('Supabase n\'est pas configuré.');
+                showLoginError('Le backend n\'est pas configuré.');
                 return;
             }
             clearLoginError();
@@ -765,13 +666,19 @@
             if (!password) { showLoginError('Veuillez entrer un mot de passe.'); return; }
 
             setButtonLoading(signinSubmitBtn, true, 'Connexion...', 'Se connecter');
-            const { error } = await signInWithEmail(email, password);
+            const { data, error } = await signInWithEmail(email, password);
             setButtonLoading(signinSubmitBtn, false, 'Connexion...', 'Se connecter');
 
             if (error) {
                 showLoginError(translateAuthError(error));
                 return;
             }
+
+            localStorage.setItem(SESSION_STORAGE_KEY, data.sessionToken);
+            loginScreen.classList.add('hidden');
+            renderProfile(data.profile);
+            generateBtn.disabled = promptInput.value.length === 0;
+            showToast(`Bon retour, ${data.profile.username} !`);
         });
 
         logoutBtn.addEventListener('click', async () => {
@@ -780,16 +687,13 @@
                 showToast('Erreur lors de la déconnexion : ' + error.message, true);
                 return;
             }
-            currentUser = null;
-            currentProfile = null;
-            userInfoPanel.style.display = 'none';
-            loginScreen.classList.remove('hidden');
+            showLoggedOutState();
             showSignUp();
             showToast('Déconnecté avec succès.');
         });
 
         navAvatar.addEventListener('click', () => {
-            if (!currentUser) return;
+            if (!currentProfile) return;
             userInfoPanel.style.display = 'block';
         });
 
@@ -800,12 +704,12 @@
         promptInput.addEventListener('input', () => {
             const count = promptInput.value.length;
             charCount.textContent = count;
-            generateBtn.disabled = count === 0 || !currentUser;
+            generateBtn.disabled = count === 0 || !currentProfile;
             costDisplay.textContent = `${computeCost(promptInput.value)} crédits`;
         });
 
         generateBtn.addEventListener('click', async () => {
-            if (!currentUser) {
+            if (!currentProfile) {
                 showToast('Vous devez être connecté pour générer une vidéo.', true);
                 return;
             }
@@ -813,13 +717,13 @@
             if (!prompt) return;
 
             const cost = computeCost(prompt);
-            if (!currentProfile || currentProfile.credits < cost) {
+            if (currentProfile.credits < cost) {
                 showToast('Crédits insuffisants pour cette génération.', true);
                 return;
             }
 
             generateBtn.disabled = true;
-            const { data: updatedProfile, error: debitError } = await debitCredits(currentUser.id, cost);
+            const { data: updatedProfile, error: debitError } = await debitCredits(cost);
             if (debitError) {
                 showToast('Échec du débit des crédits : ' + debitError.message, true);
                 generateBtn.disabled = false;
@@ -835,10 +739,13 @@
 
         (async function init() {
             if (!checkConfiguration()) return;
-            onAuthStateChange((_event, session) => handleSession(session));
-            const { data, error } = await getSession();
-            if (error) console.error('Erreur de session:', error.message);
-            await handleSession(data?.session ?? null);
+
+            const existingToken = localStorage.getItem(SESSION_STORAGE_KEY);
+            if (!existingToken) {
+                showLoggedOutState();
+                return;
+            }
+            await refreshProfile();
         })();
     </script>
 </body>
