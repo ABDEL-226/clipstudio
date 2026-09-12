@@ -461,11 +461,9 @@
                 return { data: null, error: { message: "Le backend n'est pas configuré (SHEETS_WEBAPP_URL / SHEETS_APP_TOKEN)." } };
             }
             try {
-                const response = await fetch(SHEETS_WEBAPP_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ token: SHEETS_APP_TOKEN, action, ...params })
-                });
+                const payload = JSON.stringify({ token: SHEETS_APP_TOKEN, action, ...params });
+                const url = SHEETS_WEBAPP_URL + '?payload=' + encodeURIComponent(payload);
+                const response = await fetch(url, { method: 'GET' });
                 const json = await response.json();
                 if (json.error) {
                     return { data: null, error: { message: json.error } };
